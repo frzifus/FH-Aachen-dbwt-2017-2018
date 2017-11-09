@@ -1,0 +1,12 @@
+{
+	"app_name": "dbwt application",
+	"base_url": "http://localhost:8090",
+	"port": 8090,
+	"verbose": false,
+	"static_dir": "static",
+	"view_dir": "view",
+	"database": "",
+	"database_conn": "",
+        "automigrate": true,
+        "no_model": true
+}
