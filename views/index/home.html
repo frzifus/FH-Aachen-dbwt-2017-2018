@@ -1,0 +1,39 @@
+{{template "header" .}}
+{{template "navbar" .}}
+<div class="row">
+  <div class="col-sm-3 signin">
+    {{template "login" .}}
+  </div>
+  <div class="col-sm-9 content">
+    <div class="row" style="min-height: 15em;">
+      <div class="col-sm-12">
+        <h2>
+          e-Mensa ist ein Portal zum Vorbestellen von Gerichten und zum Verabreden mit Kommilitonen und Freunden
+        </h2>
+      </div> <!--  -->
+    </div>  <!-- -->
+    <div class="row">
+      <div class="col-sm-6">
+        <p>Neu hier und Student?</p>
+        <button class="btn btn-default">
+          <span class="glyphicon glyphicon glyphicon-hand-right"></span> Registrieren
+        </button>
+      </div>
+      <div class="col-sm-6">
+        <p>Wieder hungrig?</p>
+        <button class="btn btn-default">
+          <span class="glyphicon glyphicon glyphicon-cutlery"></span> Anmelden
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <p>e-Mensa ist im Beta-Stadium und kann aktuell nicht fuer Bestellungen in einer der vielen Mensen verwendet werden.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{{template "footer" .}}
