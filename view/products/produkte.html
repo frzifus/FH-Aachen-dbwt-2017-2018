@@ -1,0 +1,92 @@
+{{template "header" .}}
+{{template "navbar" .}}
+
+
+<div class="row">
+    <p class="produktetopic">Verfügbare Speisen (Bestseller)</p>
+</div>
+<div class="row">
+    <form class="col-md-3">
+        <fieldset class="kasten_Produkte">
+
+
+            <legend class="speiseliste">Speisenliste filtern</legend>
+
+            <select class="kategorien" name="Kategorie">
+                <option value="Kat">Kategorien</option>
+                <option value="FG">Fleischgerichte</option>
+                <option value="GG">Gemüsegerichte</option>
+                <option value="FiG">Fischgerichte</option>
+            </select>
+
+            <br /><br />
+            <ul class="ul3">
+                <li class="list3">
+                    <label>
+                        <input type="checkbox" name="filter" value="verfügbar">
+                        nur verfügbare
+                    </label>
+                </li>
+                <li class="list3">
+                    <label>
+                        <input type="checkbox" name="filter" value="vegetarisch">
+                        nur vegetarische
+                    </label>
+                </li>
+                <li class="list3">
+                    <label>
+                        <input type="checkbox" name="filter" value="vegan">
+                        nur vegane
+                    </label>
+                </li>
+            </ul>
+
+            <br />
+
+            <button type="button" class="btn2">Speisen filtern</button>
+
+        </fieldset>
+    </form>
+
+    <div class="col-md-9">
+        <div class="row" id="oberereihe">
+            <div class="col-md-3" id="1.1">
+                <img src="static/images/food.jpg" alt="Curry Wok" class="bildgroesse">
+                <p class="bildschrift">Curry Wok<br /><a href="Detail?product_id=1">Details</a></p>
+            </div>
+            <div class="col-md-3" id="1.2">
+                <img src="static/images/food.jpg" alt="Schnitzel" class="bildgroesse">
+                <p class="bildschrift">Schnitzel<br /><a href="Detail?product_id=2">Details</a></p>
+            </div>
+            <div class="col-md-3" id="1.3">
+                <img src="static/images/food.jpg" alt="Bratrolle" class="bildgroesse">
+                <p class="bildschrift">Bratrolle vergriffen<br /><a href="Detail?product_id=3">Details</a></p>
+            </div>
+            <div class="col-md-3" id="1.4">
+                <img src="static/images/food.jpg" alt="Krautsalat" class="bildgroesse">
+                <p class="bildschrift">Krautsalat<br /><a href="Detail?product_id=4">Details</a></p>
+            </div>
+        </div>
+        <div class="row" id="unterereihe">
+            <div class="col-md-3" id="2.1">
+                <img src="static/images/food.jpg" alt="Falafel" class="bildgroesse">
+                <p class="bildschrift">Falafel<br /><a href="Detail?product_id=5">Details</a></p>
+            </div>
+            <div class="col-md-3" id="2.2">
+                <img src="static/images/food.jpg" alt="Currywurst" class="bildgroesse">
+                <p class="bildschrift">Currywurst<br /><a href="Detail?product_id=6">Details</a></p>
+            </div>
+            <div class="col-md-3" id="2.3">
+                <img src="static/images/food.jpg" alt="Käsestulle" class="bildgroesse">
+                <p class="bildschrift">Käsestulle<br /><a href="Detail?product_id=7">Details</a></p>
+            </div>
+            <div class="col-md-3" id="2.4">
+                <img src="static/images/food.jpg" alt="Spiegelei" class="bildgroesse">
+                <p class="bildschrift">Spiegelei<br /><a href="Detail?product_id=8">Details</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{template "footer" .}}
