@@ -5,8 +5,8 @@
 	"verbose": false,
 	"static_dir": "static",
 	"view_dir": "view",
-	"database": "",
-	"database_conn": "",
+	"database": "MySQL",
+	"database_conn": "mysql://user:1234@localhost/dbwt",
         "automigrate": true,
         "no_model": true
 }
