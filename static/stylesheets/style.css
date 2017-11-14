@@ -1,0 +1,180 @@
+﻿.row {
+    margin-top: 20px;
+}
+#headerrow {
+    border-bottom: solid;
+}
+#headertopic {
+    font-size: 200%;
+    font-weight: 700;
+    margin-top:10px;
+}
+.ulheader {
+    margin: 0;
+    padding: 0;
+}
+
+.listheader {
+    float: left;
+    list-style: none;
+    margin:auto;
+    padding: 5px 10px;
+    border-right:solid;
+}
+
+#suchleiste {
+
+    margin-top:15px;
+    margin-left:180px;
+}
+
+#rowfooter{
+    border-top:solid;
+}
+#footercopy{
+    margin-top:20px;
+}
+.ulfooter {
+    margin: 0;
+    padding: 0;
+}
+.listfooter{
+    float:left;
+    list-style:none;
+    border-right:solid;
+    margin:auto;
+    padding:5px 10px;
+}
+
+
+#startgrosserkasten {
+    border-right: solid;
+    border-left: solid;
+    border-top: solid;
+    border-bottom: solid;
+    height: 100px;
+    background-color: grey;
+}
+
+.btnstart {
+    border: ridge;
+    width: 150px;
+    height:40px;
+}
+
+#startkleinerkasten {
+    border-right: solid;
+    border-left: solid;
+    border-top: solid;
+    border-bottom: solid;
+    height: 100px;
+    background-color: grey;
+}
+
+
+.col-md-6 {
+    float: left;
+    width: 400px;
+    padding: 20px 0;
+}
+
+
+.produktetopic{
+    font-size:170%;
+    text-align:center;
+}
+
+
+
+
+.speiseliste{
+    text-align:center;
+    font-size:15px;
+    margin-bottom:0px;
+    border-bottom:0px;
+}
+.kasten_Produkte{
+    height:300px;
+    border:solid;
+    padding:10px;
+    width:200px;
+}
+
+.kategorien{
+    width:70%;
+   padding: 7px 10px;
+   margin-left:25px;
+}
+
+.list3{
+    list-style:none;
+    margin-left:-15px;
+    width:100%;
+    font-size:small;
+}
+.btn2{
+    border:ridge;
+    margin-left:30px;
+}
+
+.bildgroesse{
+    height:90px;
+    width:110px;
+    margin-left:40px;
+}
+.bildschrift{
+    text-align:center;
+}
+.detailstopic{
+    font-size:170%;
+    text-align:center;
+}
+#kastendetails{
+    border-top:solid;
+    border-right:solid;
+    border-bottom:solid;
+    border-left:solid;
+    background-color:grey;
+    height:148px;
+    width:600px;
+}
+.loginkasten{
+    margin-top:-32px;
+    text-align:left;
+    border:solid;
+    height:180px;
+    width:220px;
+    padding:10px;
+}
+.login{
+    padding:20px;
+    text-align:left;
+    margin-bottom:0;
+    border-bottom:0;
+    font-size:20px;
+    width:90px;
+}
+.preis{
+    text-align:right;
+    font-size:20px;
+}
+.btnvorbestellen{
+    margin-top:40px;
+    margin-left:40px;
+    height:40px;
+    width:150px;
+    border:ridge;
+}
+.anmeldentext{
+    margin-left:35px;
+}
+
+a{
+    color:#00b5ad;
+}
+a:hover {
+        color: #00b5ad;
+    }
+.bemerkung{
+    margin-left:30px;
+}
