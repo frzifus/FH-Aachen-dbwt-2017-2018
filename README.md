@@ -1,6 +1,10 @@
 # Info
 This project is developed for learning purposes. This is a site that allows you to order meals in the canteen. Based on the programming language golang. The mvc framework utron is used. Located at "github. com/gernest/utron". 
 
+# Entity Relationship Modell 
+The model described here is used.
+![ER Modell](./doc/erdiagramm.jpg "Entity-Relationship-Modell")
+
 # Source
 
 ##### golang:
