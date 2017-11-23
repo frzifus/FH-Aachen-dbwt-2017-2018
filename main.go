@@ -34,17 +34,25 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = app.Model.Register(&m.Test{})
+	err = app.Model.Register(&m.Nutzer{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// CReate Models tables if they dont exist yet
+	fmt.Printf("Database: %s\n DatabaseConn: %s\n",
+		app.Config.Database, app.Config.DatabaseConn)
+	if err := app.Model.OpenWithConfig(app.Config); err != nil {
+		panic(err)
+	}
 	// app.Model.AutoMigrateAll()
+	fmt.Printf("%v\n", app.Model.IsOpen())
+	app.Model.SingularTable(true)
 
 	// Register Controllers
 	app.AddController(c.NewIndex)
 	app.AddController(c.NewProducts)
+	app.AddController(c.NewLogin)
 
 	// Start the server
 	port := fmt.Sprintf(":%d", app.Config.Port)
