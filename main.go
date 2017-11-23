@@ -30,7 +30,7 @@ func main() {
 	}
 
 	// Register Models
-	err = app.Model.Register(&m.Product{})
+	err = app.Model.Register(&m.Produkt{})
 	if err != nil {
 		log.Fatal(err)
 	}

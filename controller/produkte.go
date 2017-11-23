@@ -35,7 +35,7 @@ func (p *products) Detail() {
 	r := p.Ctx.Request()
 	productID := r.URL.Query().Get("product_id")
 
-	ID, err := strconv.Atoi(productID)
+	id, err := strconv.Atoi(productID)
 
 	if err != nil {
 		// p.Ctx.Data["Message"] = err.Error()
@@ -44,11 +44,10 @@ func (p *products) Detail() {
 		// return
 		p.Ctx.Redirect("/Produkte", http.StatusFound)
 	}
-	product := []*model.Product{}
-	var where = "ID=" + string(ID)
-	p.Ctx.DB.Find(&product, where)
+	product := model.Produkt{}
+	p.Ctx.DB.First(&product, id)
 	p.Ctx.Data["title"] = "Detail"
-	p.Ctx.Data["product"] = product
+	p.Ctx.Data["products"] = product
 	p.Ctx.Template = "products/detail"
 	p.HTML(http.StatusOK)
 }
