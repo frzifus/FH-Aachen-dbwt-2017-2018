@@ -5,8 +5,8 @@
 	"verbose": false,
 	"static_dir": "static",
 	"view_dir": "view",
-	"database": "MySQL",
-	"database_conn": "mysql://dbwt:1234@dbwt-db/dbwt",
-        "automigrate": true,
-        "no_model": true
+	"database": "mysql",
+	"database_conn": "root:1234@tcp(172.18.0.2:3306)/dbwt",
+        "automigrate": false,
+        "no_model": false
 }
