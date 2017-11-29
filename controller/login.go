@@ -20,7 +20,11 @@ type login struct {
 func NewLogin() controller.Controller {
 	return &login{
 		Routes: []string{
-			"get;/Login;Login",
+			"get;/SignUp;SignUp",
+			"get;/SignIn;SignIn",
+			"get;/SignOff;SignOff",
+			"post;/Success;Success",
+			"post;/Register;Register",
 		},
 	}
 }
@@ -30,42 +34,46 @@ func (l *login) encryptPassword(password string) string {
 	return "{SHA256}" + base64.StdEncoding.EncodeToString(h[:])
 }
 
-// func (l *login) register() {
-//	r := l.Ctx.Request()
-//	newUser := model.Nutzer{
-//		Aktiv:       true,
-//		Vorname:     r.FormValue("vorname"),
-//		Nachname:    r.FormValue("nachname"),
-//		Mail:        r.FormValue("mail"),
-//		Loginname:   r.FormValue("usr"),
-//		Algorithmus: "sha256",
-//		Hash:        l.encryptPassword(r.FormValue("pwd")),
-//	}
-//	if err := l.Ctx.DB.Create(&newUser).Error; err != nil {
-//		l.Ctx.DB.Rollback()
-//		fmt.Printf("Could not create user: %s", err)
-//	}
-// }
-
-func (l *login) signIn() {
-	r := l.Ctx.Request()
-	usr := r.FormValue("usr")
-	pwd := r.FormValue("pwd")
-	pwd64 := l.encryptPassword(pwd)
-	u := model.Nutzer{
-		Loginname: usr,
-		Hash:      pwd64,
+func (l *login) SignIn() {
+	l.Ctx.Data["signdIn"] = l.signedIn()
+	if len(l.Ctx.Request().URL.Query().Get("error")) > 0 {
+		l.Ctx.Data["error"] = true
+	} else {
+		l.Ctx.Data["error"] = false
 	}
-	l.Ctx.DB.Where(&u).First(&u)
-	// if u.Aktiv {
-	// session cookie setzen
-	// session, _ := l.Ctx.NewSession("test")
-	// l.Ctx.SaveSession(session)
-	// }
+	l.Ctx.Template = "login/signin"
+	l.HTML(http.StatusOK)
+}
+
+func (l *login) Success() {
+	r := l.Ctx.Request()
+	ln := r.FormValue("login_name")
+	pwd := r.FormValue("password")
+	pwd64 := l.encryptPassword(pwd)
+	u := &model.User{}
+
+	if err := l.Ctx.DB.Where("loginname = ? AND hash = ?",
+		ln, pwd64).Find(&u).Error; err != nil {
+
+		l.Ctx.Redirect("/SignIn?error=1", http.StatusFound)
+	}
+	l.Ctx.Data["user"] = u
+	l.Ctx.Template = "login/success"
+	l.HTML(http.StatusOK)
+}
+
+func (l *login) SignOff() {
+	session, err := l.Ctx.SessionStore.Get(l.Ctx.Request(), "text")
+	if err != nil {
+
+	}
+	fmt.Println(session.Name())
+
+	l.Ctx.Redirect("/", http.StatusFound)
 }
 
 func (l *login) signedIn() bool {
-	_, err := l.Ctx.GetSession("test")
+	_, err := l.Ctx.SessionStore.New(l.Ctx.Request(), "test")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -77,13 +85,34 @@ func (l *login) newSession(name string) error {
 	return l.Ctx.SaveSession(session)
 }
 
-func (l *login) Login() {
-	l.signIn()
-
-	if l.signedIn() {
-		fmt.Println("success")
+func (l *login) Register() {
+	r := l.Ctx.Request()
+	newUser := &model.User{
+		Active:    true,
+		Firstname: r.FormValue("first_name"),
+		Lastname:  r.FormValue("last_name"),
+		Mail:      r.FormValue("email"),
+		Loginname: r.FormValue("display_name"),
+		Algo:      "sha256",
+		Hash:      l.encryptPassword(r.FormValue("password")),
 	}
 
-	l.Ctx.Template = "login/login"
+	// if err := decoder.Decode(newUser, req.PostForm); err != nil {
+	//	l.Ctx.Data["Message"] = err.Error()
+	//	l.Ctx.Template = "error"
+	//	l.HTML(http.StatusInternalServerError)
+	//	return
+	// }
+	if err := l.Ctx.DB.Create(newUser).Error; err != nil {
+		l.Ctx.DB.Rollback()
+		fmt.Printf("Could not create user: %s", err)
+	}
+
+	l.Ctx.Redirect("/", http.StatusFound)
+}
+
+func (l *login) SignUp() {
+	l.Ctx.Data["SigndIn"] = l.signedIn()
+	l.Ctx.Template = "login/signup"
 	l.HTML(http.StatusOK)
 }

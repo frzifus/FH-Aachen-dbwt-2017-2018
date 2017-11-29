@@ -5,9 +5,51 @@ import (
 	"time"
 )
 
-// Angehoerige -
-type Angehoerige struct {
-	Nr int64 `schema:"nr"`
+// User - FH-Nutzer
+type User struct {
+	Nr           uint           `gorm:"column:nr;AUTO_INCREMENT;primary_key"`
+	Active       bool           `gorm:"column:active;default:true"`
+	Firstname    string         `gorm:"column:firstname;not null"`
+	Lastname     string         `gorm:"column:lastname;not null"`
+	Mail         string         `gorm:"column:mail;unique"`
+	Loginname    string         `gorm:"column:loginname"`
+	CreatedAt    time.Time      `gorm:"column:created_at;default:CURRENT_DATE"`
+	LastLogin    time.Time      `gorm:"column:last_login"`
+	Stretch      uint           `gorm:"column:stretch;not null"`
+	Algo         string         `gorm:"column:algo;not null"`
+	Salt         string         `gorm:"column:salt;type:varchar(32);not null"`
+	Hash         string         `gorm:"column:hash;type:varchar(64);not null"`
+}
+
+// Member - Fh-Angehoerige
+type Member struct {
+	Nr     uint `gorm:"column:nr;primary_key"`
+    User   User `gorm:"ForeignKey:UserNr;AssociationForeignKey:Nr"`
+    UserNr uint
+}
+
+// Guest - Gast
+type Guest struct {
+    Reason     string    `gorm:"column:reason;not null"`
+	ExpiryDate time.Time `gorm:"column:expiry_date;default:CURRENT_DATE"`
+	Nr         uint      `gorm:"column:nr;not null"`
+}
+
+// Student - Student
+type Student struct {
+	StudentId      int    `gorm:"column:student_id;not null"`
+	Course         string `gorm:"column:course;not null"`
+    Member         Member `gorm:"column:nr;ForeignKey:UserNr;AssociationForeignKey:Refer"`
+    MemberNr       uint
+
+	Nr             uint  `schema:"nr"`
+}
+//////////////////////////////////////////////
+// Mitarbeiter -
+type Mitarbeiter struct {
+	Telefonnummer sql.NullInt64  `schema:"telefonnummer"`
+	Buero         sql.NullString `schema:"buero"`
+	Nr            int64          `schema:"nr"`
 }
 
 // Bestellung -
@@ -26,13 +68,6 @@ type Bild struct {
 	Bildunterschrift sql.NullString `schema:"bildunterschrift"`
 }
 
-// Gast -
-type Gast struct {
-	Grund  string    `schema:"grund"`
-	Ablauf time.Time `schema:"ablauf"`
-	Nr     int64     `schema:"nr"`
-}
-
 // Kategorie -
 type Kategorie struct {
 	Id            int64          `schema:"id"`
@@ -41,28 +76,16 @@ type Kategorie struct {
 	Kategoriebild sql.NullInt64  `schema:"kategoriebild"`
 }
 
-// Mitarbeiter -
-type Mitarbeiter struct {
-	Telefonnummer sql.NullInt64  `schema:"telefonnummer"`
-	Buero         sql.NullString `schema:"buero"`
-	Nr            int64          `schema:"nr"`
+// Produkt -
+type Product struct {
+	Id            int           `schema:"id"`
+	Beschreibung  string        `schema:"beschreibung"`
+	Vegetarisch   sql.NullInt64 `schema:"vegetarisch"`
+	Vegan         sql.NullInt64 `schema:"vegan"`
+	ProduktbildId int           `schema:"produktbildId"`
+	KategorieId   int           `schema:"kategorieId"`
 }
 
-// Nutzer -
-type Nutzer struct {
-	Nr           int64          `schema:"nr"`
-	Aktiv        int64          `schema:"aktiv"`
-	Vorname      string         `schema:"vorname"`
-	Nachname     string         `schema:"nachname"`
-	Mail         string         `schema:"mail"`
-	Loginname    string         `schema:"loginname"`
-	Anlegedatum  time.Time      `schema:"anlegedatum"`
-	LetzterLogin time.Time      `schema:"letzterLogin"`
-	Stretch      int64          `schema:"stretch"`
-	Algorithmus  sql.NullString `schema:"algorithmus"`
-	Salt         string         `schema:"salt"`
-	Hash         string         `schema:"hash"`
-}
 
 // Preis -
 type Preis struct {
@@ -70,23 +93,6 @@ type Preis struct {
 	Studentenbetrag   int64 `schema:"studentenbetrag"`
 	Mitarbeiterbetrag int64 `schema:"mitarbeiterbetrag"`
 	Produkt           int64 `schema:"produkt"`
-}
-
-// Produkt -
-type Produkt struct {
-	Id            int64         `schema:"id"`
-	Beschreibung  string        `schema:"beschreibung"`
-	Vegetarisch   sql.NullInt64 `schema:"vegetarisch"`
-	Vegan         sql.NullInt64 `schema:"vegan"`
-	ProduktbildId int64         `schema:"produktbildId"`
-	KategorieId   int64         `schema:"kategorieId"`
-}
-
-// Student -
-type Student struct {
-	Matrikelnummer int64  `schema:"matrikelnummer"`
-	Studiengang    string `schema:"studiengang"`
-	Nr             int64  `schema:"nr"`
 }
 
 // Zutat

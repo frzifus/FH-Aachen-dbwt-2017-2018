@@ -30,11 +30,16 @@ func main() {
 	}
 
 	// Register Models
-	err = app.Model.Register(&m.Produkt{})
+	err = app.Model.Register(&m.Product{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = app.Model.Register(&m.Nutzer{})
+	err = app.Model.Register(&m.User{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+    err = app.Model.Register(&m.Member{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,9 +50,9 @@ func main() {
 	if err := app.Model.OpenWithConfig(app.Config); err != nil {
 		panic(err)
 	}
-	// app.Model.AutoMigrateAll()
 	fmt.Printf("%v\n", app.Model.IsOpen())
-	app.Model.SingularTable(true)
+	app.Model.SingularTable(false)
+        app.Model.AutoMigrateAll()
 
 	// Register Controllers
 	app.AddController(c.NewIndex)

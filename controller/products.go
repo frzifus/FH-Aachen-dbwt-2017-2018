@@ -16,7 +16,7 @@ type products struct {
 func NewProducts() controller.Controller {
 	return &products{
 		Routes: []string{
-			"get;/Produkte;Products",
+			"get;/Products;Products",
 			"get;/Detail;Detail",
 		},
 	}
@@ -26,8 +26,7 @@ func (p *products) Products() {
 	// r := p.Ctx.Request()
 	// user := p.URL.Query().Get("user")
 	p.Ctx.Data["title"] = "Produkte"
-	p.Ctx.Data["user"] = "bla"
-	p.Ctx.Template = "products/produkte"
+	p.Ctx.Template = "products/products"
 	p.HTML(http.StatusOK)
 }
 
@@ -42,12 +41,12 @@ func (p *products) Detail() {
 		// p.Ctx.Template = "error"
 		// p.HTML(http.StatusInternalServerError)
 		// return
-		p.Ctx.Redirect("/Produkte", http.StatusFound)
+		p.Ctx.Redirect("/Products", http.StatusFound)
 	}
-	product := model.Produkt{}
+	product := model.Product{}
 	p.Ctx.DB.First(&product, id)
 	p.Ctx.Data["title"] = "Detail"
-	p.Ctx.Data["products"] = product
+	p.Ctx.Data["product"] = product
 	p.Ctx.Template = "products/detail"
 	p.HTML(http.StatusOK)
 }

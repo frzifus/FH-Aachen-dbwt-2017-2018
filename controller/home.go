@@ -16,12 +16,18 @@ func NewIndex() controller.Controller {
 		Routes: []string{
 			"get;/;Index",
 			"get;/Home;Home",
+			"get;/Impressum;Impressum",
 		},
 	}
 }
 
 func (i *index) Index() {
 	i.Ctx.Redirect("/Home", http.StatusFound)
+}
+
+func (i *index) Impressum() {
+	i.Ctx.Template = "index/impressum"
+	i.HTML(http.StatusOK)
 }
 
 func (i *index) Home() {
