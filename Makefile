@@ -6,7 +6,7 @@ PWD = $(shell pwd)
 
 LDFLAGS =
 
-.PHONY: test clean arm amd64 run install uninstall docker
+.PHONY: test clean arm amd64 run install uninstall docker-cp
 
 # Build the project
 all: clean test amd64 copyResources
@@ -20,13 +20,17 @@ arm:
 	GOOS=linux GOARCH=arm go build ${LDFLAGS} -o ${BUILD_DIR}/${BINARY}-linux-arm -v
 win64:
 	GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ${BUILD_DIR}/${BINARY}-win64.exe -v
-docker:
-	@echo "Create dbwtnet"
-	docker network create dbwtnet
-	@echo "Create dbwt-db (Mariadb)"
-	docker create --name dbwt-db -e MYSQL_ROOT_PASSWORD=1234 -d --network=dbwtnet mariadb 
-	@echo "Docker IP"
-	$(shell docker inspect dbwt | grep '"IPAddress":' | head -n 1 | sed 's/"/\\n/g' | nl | grep 4 | awk '{ print $2 }' )
+
+docker-build:
+	docker-compose up -d --build
+	docker ps
+
+docker-cp:
+	docker-compose start
+	docker cp ./ dbwt_app_1:/go/src/github.com/frzifus/dbwt
+	docker exec -it dbwt_app_1 /bin/bash -c "cd /go/src/github.com/frzifus/dbwt; go install"
+	docker-compose restart
+	docker ps
 install:
 	#$(shell cp ./build/bin/dbwt /usr/bin/)
 	#$(shell cp ./systemd/dbwt.service /etc/systemd/system)

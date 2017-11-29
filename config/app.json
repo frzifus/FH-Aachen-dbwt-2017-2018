@@ -1,12 +1,12 @@
 {
-	"app_name": "dbwt application",
-	"base_url": "http://localhost:8090",
-	"port": 8090,
-	"verbose": false,
-	"static_dir": "static",
-	"view_dir": "view",
-	"database": "mysql",
-	"database_conn": "root:1234@tcp(172.18.0.2:3306)/dbwt",
+    "app_name": "dbwt application",
+    "base_url": "http://localhost:8090",
+    "port": 8090,
+    "verbose": false,
+    "static_dir": "static",
+    "view_dir": "view",
+    "database": "mysql",
+    "database_conn": "root:1234@tcp(172.20.0.2:3306)/dbwt?parseTime=true",
         "automigrate": false,
         "no_model": false
 }
