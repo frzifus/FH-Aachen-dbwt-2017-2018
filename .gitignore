@@ -1,4 +1,7 @@
 GPATH
 GRTAGS
 GTAGS
-build/*
+build/bin/*
+build/log/*
+docker-data/*
+
