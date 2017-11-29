@@ -22,21 +22,17 @@ Currently supported/tested are:
 
 ##### Build => "./build/bin/":
 ```sh
-# amd64
-make
-
-# win64
-make win64
-
-# arm
-make arm
+make amd64 # linux-amd64
+make win64 # win-64.exe
+make arm   # linux-arm
 ```
 
 # Setup Docker environment
+Note: docker compose v2+ is required.
 ```sh
-make docker
+make docker-build
 ```
-creates a container with mariadb under the name dbwt-db. It is located in the dbwtnet network. The default mysql root password is "1234".
+creates a container with mariadb under the name dbwt_database_1. The default mysql root password is "1234". Furthermore, a second container dbwt_app_1 is created, where the project will be compiled.
 
 # Test
 
