@@ -1,0 +1,19 @@
+{{template "header" .}}
+{{template "navbar" .}}
+
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-8">
+        <p>Info</p>
+        <p>Active: {{.user.Active}} </p>
+        <p>Firstname: {{.user.Firstname }}.</p>
+        <p>Lastname: {{.user.Lastname }}.</p>
+        <p>Loginname: {{.user.Loginname }}.</p>
+        <p>Role: Monkey</p>
+
+        <p><a href="/SignOff">Ausloggen</a></p>
+    </div>
+</div>
+
+{{template "footer" .}}

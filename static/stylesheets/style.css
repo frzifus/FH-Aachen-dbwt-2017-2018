@@ -48,12 +48,20 @@
 
 
 #startgrosserkasten {
+    margin-left: 0px;
     border-right: solid;
     border-left: solid;
     border-top: solid;
     border-bottom: solid;
-    height: 100px;
+    height: 80px;
     background-color: grey;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#startgrosserkasten img {
+    width: 100%;
+    height: 100%;
 }
 
 .btnstart {
@@ -67,8 +75,15 @@
     border-left: solid;
     border-top: solid;
     border-bottom: solid;
-    height: 100px;
+    height: 120px;
     background-color: grey;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#startkleinerkasten img {
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -93,11 +108,22 @@
     margin-bottom:0px;
     border-bottom:0px;
 }
+
 .kasten_Produkte{
     height:300px;
     border:solid;
     padding:10px;
     width:200px;
+}
+
+.kastendetailsbild {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.kastendetailsbild img {
+    width: 100%;
+    height: 100%;
 }
 
 .kategorien{
@@ -177,4 +203,25 @@ a:hover {
     }
 .bemerkung{
     margin-left:30px;
+}
+
+/* Credit to bootsnipp.com for the css for the color graph */
+.colorgraph {
+  height: 5px;
+  border-top: 0;
+  background: #c4e17f;
+  border-radius: 5px;
+  background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+  background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+}
+
+.vertical-offset-md-1 {
+  margin-top: 1em;
+}
+
+
+.vertical-offset-md-2 {
+  margin-top: 2em;
 }
