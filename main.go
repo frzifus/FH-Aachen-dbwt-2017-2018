@@ -39,7 +39,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-    err = app.Model.Register(&m.Member{})
+	err = app.Model.Register(&m.Member{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = app.Model.Register(&m.Ingredient{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,7 +57,7 @@ func main() {
 	}
 	fmt.Printf("%v\n", app.Model.IsOpen())
 	app.Model.SingularTable(false)
-        app.Model.AutoMigrateAll()
+	app.Model.AutoMigrateAll()
 
 	// Register Controllers
 	app.AddController(c.NewIndex)

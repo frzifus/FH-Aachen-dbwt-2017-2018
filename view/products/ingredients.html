@@ -1,0 +1,33 @@
+{{template "header" .}}
+{{template "navbar" .}}
+
+<div class="container">
+    <h2>Zutaten</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Beschreibung</th>
+                <th>Glutenfrei</th>
+                <th>Bio</th>
+                <th>Vegetarisch</th>
+                <th>Vegan</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range $k,$v:=.ingredients}}
+            <tr>
+                <td>{{$v.Name}}</td>
+                <td>{{$v.Description}}</td>
+                <td>{{$v.Glutenfree}}</td>
+                <td>{{$v.Bio}}</td>
+                <td>{{$v.Vegetarian}}</td>
+                <td>{{$v.Vegan}}</td>
+            </tr>
+            {{end}}
+
+        </tbody>
+    </table>
+</div>
+
+{{template "footer" .}}

@@ -18,14 +18,14 @@ func NewProducts() controller.Controller {
 		Routes: []string{
 			"get;/Products;Products",
 			"get;/Detail;Detail",
+			"get;/Ingredients;Ingredients",
 		},
 	}
 }
 
 func (p *products) Products() {
-	// r := p.Ctx.Request()
-	// user := p.URL.Query().Get("user")
 	p.Ctx.Data["title"] = "Produkte"
+	p.Ctx.Data["products"], _ = p.getAllProducts()
 	p.Ctx.Template = "products/products"
 	p.HTML(http.StatusOK)
 }
@@ -43,10 +43,42 @@ func (p *products) Detail() {
 		// return
 		p.Ctx.Redirect("/Products", http.StatusFound)
 	}
-	product := model.Product{}
-	p.Ctx.DB.First(&product, id)
+
 	p.Ctx.Data["title"] = "Detail"
-	p.Ctx.Data["product"] = product
+	p.Ctx.Data["product"], _ = p.getProductByID(id)
 	p.Ctx.Template = "products/detail"
 	p.HTML(http.StatusOK)
+}
+
+func (p *products) Ingredients() {
+	p.Ctx.Data["title"] = "Ingredients"
+	p.Ctx.Data["ingredients"], _ = p.getAllIngredients()
+	p.Ctx.Template = "products/ingredients"
+	p.HTML(http.StatusOK)
+}
+
+// DB - methods
+
+func (p *products) getProductByID(id int) (*model.Product, error) {
+	product := &model.Product{}
+	if err := p.Ctx.DB.First(&product, id).Error; err != nil {
+		return product, err
+	}
+	return product, nil
+}
+
+func (p *products) getAllProducts() ([]*model.Product, error) {
+	products := []*model.Product{}
+	if err := p.Ctx.DB.Find(&products).Error; err != nil {
+		return products, err
+	}
+	return products, nil
+}
+
+func (p *products) getAllIngredients() ([]*model.Ingredient, error) {
+	ingredients := []*model.Ingredient{}
+	if err := p.Ctx.DB.Find(&ingredients).Error; err != nil {
+		return ingredients, err
+	}
+	return ingredients, nil
 }
