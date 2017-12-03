@@ -30,21 +30,19 @@ func main() {
 	}
 
 	// Register Models
-	err = app.Model.Register(&m.Product{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = app.Model.Register(&m.User{})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = app.Model.Register(&m.Member{})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = app.Model.Register(&m.Ingredient{})
+	err = app.Model.Register(
+		&m.User{},
+		&m.Member{},
+		&m.Guest{},
+		&m.Student{},
+		&m.Employee{},
+		&m.Order{},
+		&m.Image{},
+		&m.Category{},
+		&m.Product{},
+		&m.Price{},
+		&m.Ingredient{},
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
