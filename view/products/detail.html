@@ -23,10 +23,14 @@
 
                 <div class="tab-content">
                     <div id="beschreibung" class="tab-pane fade in active">
-                        <p>Teigtasche mit Falafel aus Kichererbsen und Sesam, dazu passt hervorragend der <a href="">Krautsalat</a>.</p>
+                      <p>{{.product.Description }}</p>
                     </div>
                     <div id="zutaten" class="tab-pane fade">
-                        <p>Hier stehen die Zutaten.</p>
+                      <ul>
+                        {{range $k,$v:=.product.Ingredients}}
+                        <li>{{$v.Name}}</li>
+                        {{end}}
+                      </ul>
                     </div>
                     <div id="bewertungen" class="tab-pane fade">
                         <form method="post" action="http://bc5.m2c-lab.fh-aachen.de:8080/data.php">
