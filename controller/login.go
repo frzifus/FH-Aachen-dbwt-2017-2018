@@ -6,13 +6,9 @@ import (
 	"fmt"
 	"github.com/frzifus/dbwt/model"
 	"github.com/gernest/utron/controller"
-	"github.com/gorilla/schema"
 	"net/http"
 )
 
-var (
-	decoder = schema.NewDecoder()
-)
 
 type login struct {
 	controller.BaseController
@@ -102,12 +98,6 @@ func (l *login) Register() {
 		Hash:      l.encryptPassword(r.FormValue("password")),
 	}
 
-	// if err := decoder.Decode(newUser, req.PostForm); err != nil {
-	//	l.Ctx.Data["Message"] = err.Error()
-	//	l.Ctx.Template = "error"
-	//	l.HTML(http.StatusInternalServerError)
-	//	return
-	// }
 	if err := l.Ctx.DB.Create(newUser).Error; err != nil {
 		l.Ctx.DB.Rollback()
 		fmt.Printf("Could not create user: %s", err)
