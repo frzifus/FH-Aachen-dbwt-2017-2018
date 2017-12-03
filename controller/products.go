@@ -24,7 +24,7 @@ func NewProducts() controller.Controller {
 }
 
 func (p *products) Products() {
-	p.Ctx.Data["signdIn"] = signdIn(p.Ctx.Request(), p.Ctx.SessionStore)
+	p.Ctx.Data["signedIn"] = signedIn(p.Ctx.Request(), p.Ctx.SessionStore)
 	p.Ctx.Data["title"] = "Produkte"
 	p.Ctx.Data["products"], _ = p.getAllProducts()
 	p.Ctx.Template = "products/products"
@@ -33,7 +33,7 @@ func (p *products) Products() {
 
 func (p *products) Detail() {
 	r := p.Ctx.Request()
-	p.Ctx.Data["signdIn"] = signdIn(r, p.Ctx.SessionStore)
+	p.Ctx.Data["signedIn"] = signedIn(r, p.Ctx.SessionStore)
 	productID := r.URL.Query().Get("product_id")
 
 	id, err := strconv.Atoi(productID)
@@ -53,7 +53,7 @@ func (p *products) Detail() {
 }
 
 func (p *products) Ingredients() {
-	p.Ctx.Data["signdIn"] = signdIn(p.Ctx.Request(), p.Ctx.SessionStore)
+	p.Ctx.Data["signedIn"] = signedIn(p.Ctx.Request(), p.Ctx.SessionStore)
 	p.Ctx.Data["title"] = "Ingredients"
 	p.Ctx.Data["ingredients"], _ = p.getAllIngredients()
 	p.Ctx.Template = "products/ingredients"

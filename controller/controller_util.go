@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func signdIn(r *http.Request, store sessions.Store) bool {
+func signedIn(r *http.Request, store sessions.Store) bool {
 	s, err := store.Get(r, "SomeOtherCookie")
 	if err != nil {
 		return false
