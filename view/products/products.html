@@ -50,11 +50,14 @@
 
     <div class="col-md-9">
         <div class="row">
+            {{range $k,$v:=.products}}
 
-            <div class="col-md-3" id="1.1">
-                <img src="static/images/food.png" alt="Curry Wok" class="bildgroesse">
-                <p class="bildschrift">Curry Wok<br /><a href="Detail?product_id=1">Details</a></p>
+            <div class="col-md-3" id="{{$v.ID}}">
+                <img src="static/images/food.png" alt="TODO:v.Name.Bild.Altext" class="bildgroesse">
+                <p class="bildschrift">{{$v.Name}}<br /><a href="Detail?product_id={{$v.ID}}">Details</a></p>
             </div>
+
+            {{end}}
 
         </div>
     </div>
