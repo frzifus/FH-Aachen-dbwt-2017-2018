@@ -1,6 +1,17 @@
 {{template "header" .}}
 {{template "navbar" .}}
 
+{{if .signdIn}}
+<div class="alert alert-warning">
+    <strong>Warning!</strong> Ups, already signed in!!.
+</div>
+<div class="row vertical-offset-md-4">
+    <div class="col-md-2">
+        <a href="SignOff">Ausloggen!</a>
+    </div>
+</div>
+{{else}}
+
 
 <div class="row vertical-offset-md-1">
   <div class="col-md-3" >
@@ -98,5 +109,5 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 </div>
-
+{{end}}
 {{template "footer" .}}

@@ -10,13 +10,16 @@ import (
 	"net/http"
 )
 
-var decoder = schema.NewDecoder()
+var (
+	decoder = schema.NewDecoder()
+)
 
 type login struct {
 	controller.BaseController
 	Routes []string
 }
 
+// NewLogin -
 func NewLogin() controller.Controller {
 	return &login{
 		Routes: []string{
@@ -57,25 +60,38 @@ func (l *login) Success() {
 
 		l.Ctx.Redirect("/SignIn?error=1", http.StatusFound)
 	}
+
+	session, _ := l.Ctx.NewSession("SomeOtherCookie")
+	session.Values["username"] = u.Loginname
+	session.Values["Role"] = "Monkey"
+	session.Values["active"] = true
+	session.Options.Path = "/"
+	session.Options.MaxAge = 10 * 24 * 3600
+	_ = session.Save(l.Ctx.Request(), l.Ctx.Response())
+
 	l.Ctx.Data["user"] = u
 	l.Ctx.Template = "login/success"
 	l.HTML(http.StatusOK)
 }
 
 func (l *login) SignOff() {
-	session, err := l.Ctx.SessionStore.Get(l.Ctx.Request(), "text")
+	session, err := l.Ctx.SessionStore.Get(l.Ctx.Request(), "SomeOtherCookie")
 	if err != nil {
-
+		l.Ctx.Redirect("/", http.StatusFound)
 	}
-	fmt.Println(session.Name())
-
+	session.Options.MaxAge = -1
+	_ = session.Save(l.Ctx.Request(), l.Ctx.Response())
 	l.Ctx.Redirect("/", http.StatusFound)
 }
 
 func (l *login) signedIn() bool {
-	_, err := l.Ctx.SessionStore.New(l.Ctx.Request(), "test")
+	session, err := l.Ctx.SessionStore.Get(l.Ctx.Request(), "SomeOtherCookie")
 	if err != nil {
-		fmt.Println(err)
+		return false
+	}
+
+	if session.Values["active"] == true {
+		return true
 	}
 	return false
 }
@@ -112,7 +128,7 @@ func (l *login) Register() {
 }
 
 func (l *login) SignUp() {
-	l.Ctx.Data["SigndIn"] = l.signedIn()
+	l.Ctx.Data["signdIn"] = l.signedIn()
 	l.Ctx.Template = "login/signup"
 	l.HTML(http.StatusOK)
 }

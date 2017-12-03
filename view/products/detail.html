@@ -1,7 +1,7 @@
 {{template "header" .}}
 {{template "navbar" .}}
 <div class="row">
-    <p class="detailstopic">Was auch immer</p>
+    <p class="detailstopic">{{.product.Name }}</p>
 </div>
 
 <div class="row">
@@ -9,53 +9,45 @@
         {{template "login" .}}
     </div>
 
-    <div class="col-md-7 kastendetailsbild" id="kastendetails">
-        <img alt="detail bild" src="/static/images/detail.jpg" />
+    <div class="col-md-7" >
+        <div class="row kastendetailsbild" id="kastendetails">
+            <img alt="detail bild" src="/static/images/detail.jpg" />
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#beschreibung">Beschreibung</a></li>
+                    <li><a data-toggle="tab" href="#zutaten">Zutaten</a></li>
+                    <li><a data-toggle="tab" href="#bewertungen">Bewertungen</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="beschreibung" class="tab-pane fade in active">
+                        <p>Teigtasche mit Falafel aus Kichererbsen und Sesam, dazu passt hervorragend der <a href="">Krautsalat</a>.</p>
+                    </div>
+                    <div id="zutaten" class="tab-pane fade">
+                        <p>Hier stehen die Zutaten.</p>
+                    </div>
+                    <div id="bewertungen" class="tab-pane fade">
+                        <form method="post" action="http://bc5.m2c-lab.fh-aachen.de:8080/data.php">
+                            <div class="col-md-3">
+                                <label>
+                                    <input type="number" min="1" max="5" step="1" placeholder="Bewertung" />
+                                </label>
+                            </div>
+                            <div class="row">
+                                <textarea rows="4" cols="50" name="Bemerkung" class="bemerkung" placeholder="Bemerkung"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 <div class="col-md-2">
     <p class="preis"><strong>Gast</strong>-Preis <br /><strong>5,95&euro;</strong></p>
     <button type="button" class="btnvorbestellen"><i class="fa fa-cutlery"></i> Vorbestellen</button>
 </div>
-</div>
-<div class="row">
-    <div class="col-md-3">
-        <p class="anmeldentext">Melden Sie sich jetzt <br />an, um die wirklich viel <br />günstigeren Preise für<br />Mitarbeiter oder<br />Studenten zu sehen.</p>
-    </div>
-    <div class="col-md-7">
-        <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#beschreibung">Beschreibung</a></li>
-            <li><a data-toggle="tab" href="#zutaten">Zutaten</a></li>
-            <li><a data-toggle="tab" href="#bewertungen">Bewertungen</a></li>
-        </ul>
-
-        <div class="tab-content">
-            <div id="beschreibung" class="tab-pane fade in active">
-                <p>Teigtasche mit Falafel aus Kichererbsen und Sesam, dazu passt hervorragend der <a href="">Krautsalat</a>.</p>
-            </div>
-            <div id="zutaten" class="tab-pane fade">
-                <p>Hier stehen die Zutaten.</p>
-            </div>
-            <div id="bewertungen" class="tab-pane fade">
-                <form method="post" action="http://bc5.m2c-lab.fh-aachen.de:8080/data.php">
-                    <input type="hidden" name="matrikelnummer" value="3121291">
-                    <input type="hidden" name="kontrolle" value="kna">
-                    <div class="col-md-3">
-                        <label>
-                            <input type="text" placeholder="Benutzer" />
-                        </label>
-                    </div>
-                    <div class="col-md-3">
-                        <label>
-                            <input type="number" min="1" max="5" step="1" placeholder="Bewertung" />
-                        </label>
-                    </div>
-                    <div class="row">
-                        <textarea rows="4" cols="50" name="Bemerkung" class="bemerkung" placeholder="Bemerkung"></textarea>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 
 
