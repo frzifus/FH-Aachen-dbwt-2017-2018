@@ -1,10 +1,14 @@
 <footer>
     <div class="row" id="rowfooter">
-        <div class="col-md-2" id="footercopy"><p>&copy;FK 2017/18</p></div>
+        <div class="col-md-2" id="footercopy"><p>&copy; FK 2017/18</p></div>
         <div class="col-md-6">
             <ul class="ulfooter">
+                {{if .signdIn}}
+                <li class="listfooter"><a href="SignOff">Ausloggen</a></li>
+                {{else}}
                 <li class="listfooter"><a href="SignIn">Login</a></li>
                 <li class="listfooter"><a href="SignUp">Registrieren</a></li>
+                {{end}}
                 <li class="listfooter"><a href="Ingredients">Zutatenliste</a></li>
                 <li class="listfooter"><a href="Impressum">Impressum</a></li>
             </ul>

@@ -38,7 +38,7 @@ func (l *login) encryptPassword(password string) string {
 }
 
 func (l *login) SignIn() {
-	l.Ctx.Data["signdIn"] = l.signedIn()
+	l.Ctx.Data["signdIn"] = signdIn(l.Ctx.Request(), l.Ctx.SessionStore)
 	if len(l.Ctx.Request().URL.Query().Get("error")) > 0 {
 		l.Ctx.Data["error"] = true
 	} else {
@@ -70,6 +70,7 @@ func (l *login) Success() {
 	_ = session.Save(l.Ctx.Request(), l.Ctx.Response())
 
 	l.Ctx.Data["user"] = u
+	l.Ctx.Data["signdIn"] = true
 	l.Ctx.Template = "login/success"
 	l.HTML(http.StatusOK)
 }
@@ -82,18 +83,6 @@ func (l *login) SignOff() {
 	session.Options.MaxAge = -1
 	_ = session.Save(l.Ctx.Request(), l.Ctx.Response())
 	l.Ctx.Redirect("/", http.StatusFound)
-}
-
-func (l *login) signedIn() bool {
-	session, err := l.Ctx.SessionStore.Get(l.Ctx.Request(), "SomeOtherCookie")
-	if err != nil {
-		return false
-	}
-
-	if session.Values["active"] == true {
-		return true
-	}
-	return false
 }
 
 func (l *login) newSession(name string) error {
@@ -128,7 +117,7 @@ func (l *login) Register() {
 }
 
 func (l *login) SignUp() {
-	l.Ctx.Data["signdIn"] = l.signedIn()
+	l.Ctx.Data["signdIn"] = signdIn(l.Ctx.Request(), l.Ctx.SessionStore)
 	l.Ctx.Template = "login/signup"
 	l.HTML(http.StatusOK)
 }
