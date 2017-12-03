@@ -7,7 +7,7 @@ import (
 
 // User - FH-Nutzer
 type User struct {
-	Nr        uint      `gorm:"column:nr;AUTO_INCREMENT;primary_key"`
+	ID        uint      `gorm:"column:ID;AUTO_INCREMENT;primary_key"`
 	Active    bool      `gorm:"column:active;default:true"`
 	Firstname string    `gorm:"column:firstname;not null"`
 	Lastname  string    `gorm:"column:lastname;not null"`
@@ -23,21 +23,21 @@ type User struct {
 
 // Member - Fh-Angehoerige
 type Member struct {
-	Nr     uint `gorm:"column:nr;primary_key"`
-	User   User `gorm:"ForeignKey:UserNr;AssociationForeignKey:Nr"`
-	UserNr uint
+	ID     uint `gorm:"column:nr;primary_key"`
+	User   User `gorm:"ForeignKey:UserID;AssociationForeignKey:ID"`
+	UserID uint
 }
 
 // Guest - Gast
 type Guest struct {
 	Reason     string    `gorm:"column:reason;not null"`
 	ExpiryDate time.Time `gorm:"column:expiry_date;default:CURRENT_DATE"`
-	Nr         uint      `gorm:"column:nr;not null"`
+	ID         uint      `gorm:"column:nr;not null"`
 }
 
 // Student - Student
 type Student struct {
-	StudentID int    `gorm:"column:student_id;not null"`
+	StudentID uint   `gorm:"column:student_id;not null"`
 	Course    string `gorm:"column:course;not null"`
 	Member    Member `gorm:"column:nr;ForeignKey:UserNr;AssociationForeignKey:Refer"`
 	MemberNr  uint
@@ -45,60 +45,60 @@ type Student struct {
 	Nr uint `schema:"nr"`
 }
 
-//////////////////////////////////////////////
-// Mitarbeiter -
-type Mitarbeiter struct {
-	Telefonnummer sql.NullInt64  `schema:"telefonnummer"`
-	Buero         sql.NullString `schema:"buero"`
-	Nr            int64          `schema:"nr"`
+// Employee - Mitarbeiter
+type Employee struct {
+	ID          uint           `schema:"nr"`
+	PhoneNummer sql.NullInt64  `schema:"telefonnummer"`
+	Office      sql.NullString `schema:"buero"`
 }
 
-// Bestellung -
-type Bestellung struct {
-	Id        int64     `schema:"id"`
-	Zeitpunkt time.Time `schema:"zeitpunkt"`
-	Nutzernr  int64     `schema:"nutzernr"`
+// Order - Bestellung
+type Order struct {
+	ID     int64     `schema:"id"`
+	Time   time.Time `schema:"zeitpunkt"`
+	UserNr int64     `schema:"nutzernr"`
 }
 
-// Bild -
-type Bild struct {
-	Id               int64          `schema:"id"`
-	Binaerdaten      []byte         `schema:"binaerdaten"`
-	Alttext          sql.NullString `schema:"alttext"`
-	Titel            sql.NullString `schema:"titel"`
-	Bildunterschrift sql.NullString `schema:"bildunterschrift"`
+// Image - Bild
+type Image struct {
+	ID      int64          `schema:"id"`
+	Bindata []byte         `schema:"binaerdaten"`
+	Alttext sql.NullString `schema:"alttext"`
+	Title   sql.NullString `schema:"titel"`
+	Caption sql.NullString `schema:"bildunterschrift"`
 }
 
-// Kategorie -
-type Kategorie struct {
-	Id            int64          `schema:"id"`
-	Bezeichnung   sql.NullString `schema:"bezeichnung"`
-	Oberkategorie sql.NullInt64  `schema:"oberkategorie"`
-	Kategoriebild sql.NullInt64  `schema:"kategoriebild"`
+// Category - Kategorie
+type Category struct {
+	ID            int64          `schema:"id"`
+	Designation   sql.NullString `schema:"bezeichnung"`
+	UpperCategory sql.NullInt64  `schema:"oberkategorie"`
+	ImageID       sql.NullInt64  `schema:"kategoriebild"`
 }
 
 // Produkt -
 type Product struct {
-	ID            int           `schema:"id"`
-	Beschreibung  string        `schema:"beschreibung"`
-	Vegetarisch   sql.NullInt64 `schema:"vegetarisch"`
-	Vegan         sql.NullInt64 `schema:"vegan"`
-	ProduktbildId int           `schema:"produktbildId"`
-	KategorieId   int           `schema:"kategorieId"`
-	Ingredients   []Ingredient  `gorm:"many2many:products_ingredients;"`
+	ID          int `schema:"id"`
+	Name        string
+	Description string `schema:"beschreibung"`
+	ImageID     int    `schema:"produktbildId"`
+	CategoryID  int    `schema:"kategorieId"`
+	PriceID     uint
+	Price       Price        `gorm:"ForeignKey:PriceID"`
+	Ingredients []Ingredient `gorm:"many2many:products_ingredients;"`
 }
 
-// Preis -
-type Preis struct {
-	Gastbetrag        int64 `schema:"gastbetrag"`
-	Studentenbetrag   int64 `schema:"studentenbetrag"`
-	Mitarbeiterbetrag int64 `schema:"mitarbeiterbetrag"`
-	Produkt           int64 `schema:"produkt"`
+// Price - Preis
+type Price struct {
+	ID       uint `gorm:"column:ID;AUTO_INCREMENT;primary_key"`
+	Guest    uint `gorm:"column:guest"`
+	Student  uint `gorm:"column:student"`
+	Employee uint `gorm:"column:employee"`
 }
 
 // Ingredient - Zutat
 type Ingredient struct {
-	ID          int64     `gorm:"column:id;AUTO_INCREMENT;primary_key"`
+	ID          uint      `gorm:"column:id;AUTO_INCREMENT;primary_key"`
 	Glutenfree  bool      `gorm:"column:gluten_free;not null"`
 	Bio         bool      `gorm:"column:bio;not null"`
 	Vegetarian  bool      `gorm:"column:vegetarian;not null"`
