@@ -9,7 +9,6 @@ import (
 	"net/http"
 )
 
-
 type login struct {
 	controller.BaseController
 	Routes []string
@@ -59,7 +58,7 @@ func (l *login) Success() {
 
 	session, _ := l.Ctx.NewSession("SomeOtherCookie")
 	session.Values["username"] = u.Loginname
-	session.Values["Role"] = "Monkey"
+	session.Values["role"], _ = u.Role()
 	session.Values["active"] = true
 	session.Options.Path = "/"
 	session.Options.MaxAge = 10 * 24 * 3600
@@ -67,6 +66,7 @@ func (l *login) Success() {
 
 	l.Ctx.Data["user"] = u
 	l.Ctx.Data["signedIn"] = true
+	l.Ctx.Data["role"] = role(r, l.Ctx.SessionStore)
 	l.Ctx.Template = "login/success"
 	l.HTML(http.StatusOK)
 }
@@ -101,7 +101,7 @@ func (l *login) Register() {
 	if err := l.Ctx.DB.Create(newUser).Error; err != nil {
 		l.Ctx.DB.Rollback()
 		fmt.Printf("Could not create user: %s", err)
-        l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
+		l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
 	}
 
 	l.Ctx.Redirect("/SignUp?status=success", http.StatusFound)
@@ -109,14 +109,14 @@ func (l *login) Register() {
 
 func (l *login) SignUp() {
 	l.Ctx.Data["signedIn"] = signedIn(l.Ctx.Request(), l.Ctx.SessionStore)
-    r := l.Ctx.Request()
-    if r.URL.Query().Get("status") == "success" {
+	r := l.Ctx.Request()
+	if r.URL.Query().Get("status") == "success" {
 		l.Ctx.Data["status"] = "success"
 	} else if r.URL.Query().Get("status") == "error" {
 		l.Ctx.Data["status"] = "error"
 	} else {
-        l.Ctx.Data["status"] = ""
-    }
+		l.Ctx.Data["status"] = ""
+	}
 	l.Ctx.Template = "login/signup"
 	l.HTML(http.StatusOK)
 }
