@@ -26,13 +26,13 @@ func (i *index) Index() {
 }
 
 func (i *index) Impressum() {
-	i.Ctx.Data["signdIn"] = signdIn(i.Ctx.Request(), i.Ctx.SessionStore)
+	i.Ctx.Data["signedIn"] = signedIn(i.Ctx.Request(), i.Ctx.SessionStore)
 	i.Ctx.Template = "index/impressum"
 	i.HTML(http.StatusOK)
 }
 
 func (i *index) Home() {
-	i.Ctx.Data["signdIn"] = signdIn(i.Ctx.Request(), i.Ctx.SessionStore)
+	i.Ctx.Data["signedIn"] = signedIn(i.Ctx.Request(), i.Ctx.SessionStore)
 	i.Ctx.Data["title"] = "Home"
 	i.Ctx.Template = "index/home"
 	i.HTML(http.StatusOK)

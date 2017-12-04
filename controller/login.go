@@ -6,13 +6,9 @@ import (
 	"fmt"
 	"github.com/frzifus/dbwt/model"
 	"github.com/gernest/utron/controller"
-	"github.com/gorilla/schema"
 	"net/http"
 )
 
-var (
-	decoder = schema.NewDecoder()
-)
 
 type login struct {
 	controller.BaseController
@@ -38,7 +34,7 @@ func (l *login) encryptPassword(password string) string {
 }
 
 func (l *login) SignIn() {
-	l.Ctx.Data["signdIn"] = signdIn(l.Ctx.Request(), l.Ctx.SessionStore)
+	l.Ctx.Data["signedIn"] = signedIn(l.Ctx.Request(), l.Ctx.SessionStore)
 	if len(l.Ctx.Request().URL.Query().Get("error")) > 0 {
 		l.Ctx.Data["error"] = true
 	} else {
@@ -70,7 +66,7 @@ func (l *login) Success() {
 	_ = session.Save(l.Ctx.Request(), l.Ctx.Response())
 
 	l.Ctx.Data["user"] = u
-	l.Ctx.Data["signdIn"] = true
+	l.Ctx.Data["signedIn"] = true
 	l.Ctx.Template = "login/success"
 	l.HTML(http.StatusOK)
 }
@@ -102,22 +98,25 @@ func (l *login) Register() {
 		Hash:      l.encryptPassword(r.FormValue("password")),
 	}
 
-	// if err := decoder.Decode(newUser, req.PostForm); err != nil {
-	//	l.Ctx.Data["Message"] = err.Error()
-	//	l.Ctx.Template = "error"
-	//	l.HTML(http.StatusInternalServerError)
-	//	return
-	// }
 	if err := l.Ctx.DB.Create(newUser).Error; err != nil {
 		l.Ctx.DB.Rollback()
 		fmt.Printf("Could not create user: %s", err)
+        l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
 	}
 
-	l.Ctx.Redirect("/", http.StatusFound)
+	l.Ctx.Redirect("/SignUp?status=success", http.StatusFound)
 }
 
 func (l *login) SignUp() {
-	l.Ctx.Data["signdIn"] = signdIn(l.Ctx.Request(), l.Ctx.SessionStore)
+	l.Ctx.Data["signedIn"] = signedIn(l.Ctx.Request(), l.Ctx.SessionStore)
+    r := l.Ctx.Request()
+    if r.URL.Query().Get("status") == "success" {
+		l.Ctx.Data["status"] = "success"
+	} else if r.URL.Query().Get("status") == "error" {
+		l.Ctx.Data["status"] = "error"
+	} else {
+        l.Ctx.Data["status"] = ""
+    }
 	l.Ctx.Template = "login/signup"
 	l.HTML(http.StatusOK)
 }

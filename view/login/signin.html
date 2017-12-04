@@ -1,22 +1,26 @@
 {{template "header" .}}
 {{template "navbar" .}}
 
-<div class="row">
-        {{if .error}}
-        <div class="alert alert-danger">
-            <strong>Failed!</strong> username and/or password invalid!!.
-        </div>
-        {{end}}
-</div>
 
-{{if .signdIn}}
-<div class="alert alert-warning">
+{{if .error}}
+<div class="row">
+  <div class="alert alert-danger">
+    <strong>Failed!</strong> username and/or password invalid!!.
+  </div>
+</div>
+{{end}}
+
+
+{{if .signedIn}}
+<div class="row">
+  <div class="alert alert-warning">
     <strong>Warning!</strong> Ups, already signed in!!.
 </div>
 <div class="row vertical-offset-md-4">
     <div class="col-md-2">
         <a href="SignOff">Ausloggen!</a>
     </div>
+</div>
 </div>
 {{else}}
 <div class="row vertical-offset-md-1">
