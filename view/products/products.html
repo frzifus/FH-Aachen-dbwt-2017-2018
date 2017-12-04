@@ -2,6 +2,13 @@
 {{template "navbar" .}}
 
 
+{{if .missing}}
+<div class="row">
+    <div class="alert alert-danger">
+        <strong>Failed!</strong> Artikel nicht gefunden!!.
+    </div>
+</div>
+{{end}}
 <div class="row">
     <p class="produktetopic">Verfügbare Speisen (Bestseller)</p>
 </div>

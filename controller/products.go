@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/frzifus/dbwt/model"
 	"github.com/gernest/utron/controller"
-	// "github.com/gorilla/schema"
 	"net/http"
 	"strconv"
 )
@@ -24,9 +23,19 @@ func NewProducts() controller.Controller {
 }
 
 func (p *products) Products() {
-	p.Ctx.Data["signedIn"] = signedIn(p.Ctx.Request(), p.Ctx.SessionStore)
+	r := p.Ctx.Request()
+	p.Ctx.Data["signedIn"] = signedIn(r, p.Ctx.SessionStore)
 	p.Ctx.Data["title"] = "Produkte"
 	p.Ctx.Data["products"], _ = p.getAllProducts()
+
+	missing, err := strconv.Atoi(r.URL.Query().Get("missing"))
+
+	if missing > 0 && err == nil {
+		p.Ctx.Data["missing"] = true
+	} else {
+		p.Ctx.Data["missing"] = false
+	}
+
 	p.Ctx.Template = "products/products"
 	p.HTML(http.StatusOK)
 }
@@ -38,16 +47,14 @@ func (p *products) Detail() {
 
 	id, err := strconv.Atoi(productID)
 
-	if err != nil {
-		// p.Ctx.Data["Message"] = err.Error()
-		// p.Ctx.Template = "error"
-		// p.HTML(http.StatusInternalServerError)
-		// return
-		p.Ctx.Redirect("/Products", http.StatusFound)
+	product, perr := p.getProductByID(id)
+
+	if err != nil || perr != nil {
+		p.Ctx.Redirect("/Products?missing=1", http.StatusFound)
 	}
 
 	p.Ctx.Data["title"] = "Detail"
-	p.Ctx.Data["product"], _ = p.getProductByID(id)
+	p.Ctx.Data["product"] = product
 	p.Ctx.Template = "products/detail"
 	p.HTML(http.StatusOK)
 }
@@ -64,7 +71,7 @@ func (p *products) Ingredients() {
 
 func (p *products) getProductByID(id int) (*model.Product, error) {
 	product := &model.Product{}
-	if err := p.Ctx.DB.First(&product, id).Error; err != nil {
+	if err := p.Ctx.DB.Preload("Price").Preload("Orders").Preload("Ingredients").First(&product, id).Error; err != nil {
 		return product, err
 	}
 	return product, nil
@@ -72,7 +79,7 @@ func (p *products) getProductByID(id int) (*model.Product, error) {
 
 func (p *products) getAllProducts() ([]*model.Product, error) {
 	products := []*model.Product{}
-	if err := p.Ctx.DB.Find(&products).Error; err != nil {
+	if err := p.Ctx.DB.Preload("Price").Find(&products).Error; err != nil {
 		return products, err
 	}
 	return products, nil
