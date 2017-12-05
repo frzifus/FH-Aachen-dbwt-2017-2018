@@ -112,7 +112,6 @@ func (l *login) SignUp() {
 func (l *login) newSession(u *model.User) {
 	session, _ := l.Ctx.NewSession("SomeOtherCookie")
 	session.Values["username"] = u.Loginname
-    // TODO: check role from database
 	session.Values["role"] = l.dbRole(u)
 	session.Values["active"] = true
 	session.Options.Path = "/"

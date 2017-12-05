@@ -40,7 +40,7 @@
                                 </label>
                             </div>
                             <div class="row">
-                                <textarea rows="4" cols="50" name="Bemerkung" class="bemerkung" placeholder="Bemerkung"></textarea>
+                              <textarea rows="4" cols="50" name="Bemerkung" class="bemerkung" placeholder="Bemerkung"></textarea>
                             </div>
                         </form>
                     </div>
@@ -48,8 +48,15 @@
             </div>
         </div>
     </div>
-<div class="col-md-2">
-    <p class="preis"><strong>Gast</strong>-Preis <br /><strong>{{.product.Price.Guest}}&euro;</strong></p>
+    <div class="col-md-2">
+      {{ if eq .role "student"}}
+      <p class="preis"><strong>Mitarbeiter</strong>-Preis <br /><strong> {{.product.Price.Student}} €</strong></p>
+      {{else}}{{ if eq .role "employee"}}
+      <p class="preis"><strong>Mitarbeiter</strong>-Preis <br /><strong> {{.product.Price.Employee}} €</strong></p>
+      {{else}}
+      <p class="preis"><strong>Gast</strong>-Preis <br /><strong> {{.product.Price.Guest}} €</strong></p>
+    {{end}}
+    {{end}}
     <button type="button" class="btnvorbestellen"><i class="fa fa-cutlery"></i> Vorbestellen</button>
 </div>
 </div>

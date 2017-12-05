@@ -55,6 +55,7 @@ func (p *products) Detail() {
 
 	p.Ctx.Data["title"] = "Detail"
 	p.Ctx.Data["product"] = product
+    p.Ctx.Data["role"] = role(r, p.Ctx.SessionStore)
 	p.Ctx.Template = "products/detail"
 	p.HTML(http.StatusOK)
 }
