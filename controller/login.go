@@ -59,7 +59,7 @@ func (l *login) Success() {
 
 	l.Ctx.Data["user"] = u
 	l.Ctx.Data["signedIn"] = true
-	l.Ctx.Data["role"] = role(r, l.Ctx.SessionStore)
+	l.Ctx.Data["role"] = l.dbRole(u)
 	l.Ctx.Template = "login/success"
 	l.HTML(http.StatusOK)
 }
@@ -86,7 +86,7 @@ func (l *login) Register() {
 		Hash:      l.encryptPassword(r.FormValue("password")),
 	}
 
-	if err := l.dbCreateGuest(newUser); err != nil {
+	if err := l.dbCreateStudent(newUser); err != nil {
 		l.Ctx.DB.Rollback()
 		fmt.Printf("Could not create user: %s", err)
 		l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
@@ -112,7 +112,8 @@ func (l *login) SignUp() {
 func (l *login) newSession(u *model.User) {
 	session, _ := l.Ctx.NewSession("SomeOtherCookie")
 	session.Values["username"] = u.Loginname
-	session.Values["role"], _ = u.Role()
+    // TODO: check role from database
+	session.Values["role"] = l.dbRole(u)
 	session.Values["active"] = true
 	session.Options.Path = "/"
 	session.Options.MaxAge = 10 * 24 * 3600
@@ -165,4 +166,33 @@ func (l *login) dbCreateEmployee(u model.User) error {
 		MemberID: m.UserID,
 	}
 	return l.Ctx.DB.Create(&e).Error
+}
+
+func (l *login) dbRole(u *model.User) string {
+    if _, err := l.guestByID(u.ID); err == nil {
+        return "guest"
+    } else if _, err:= l.studentByUserID(u.ID); err == nil {
+        return "student"
+    } else if _, err := l.employeeByUserID(u.ID); err == nil {
+        return "employee"
+    } 
+    return ""
+}
+
+func (l *login) studentByUserID(id uint) (*model.Student, error) {
+    s := &model.Student{}
+    err := l.Ctx.DB.Where("member_id = ?", id).First(&s).Error
+    return s, err
+}
+
+func (l *login) guestByID(id uint) (*model.Guest, error) {
+    g := &model.Guest{}
+    err := l.Ctx.DB.First(&g, id).Error
+    return g, err        
+}
+
+func (l *login) employeeByUserID(id uint) (*model.Employee, error) {
+    e := &model.Employee{}
+    err := l.Ctx.DB.Where("member_id = ?", id).First(&e).Error
+    return e, err    
 }
