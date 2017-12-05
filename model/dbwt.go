@@ -113,7 +113,7 @@ func (p *Product) IsVegan() bool {
 func (p *Product) IsVegetarian() bool {
 	for _, v := range p.Ingredients {
 		if v.Vegetarian == false {
-			return v.Vegan
+			return v.Vegetarian
 		}
 	}
 	return true
