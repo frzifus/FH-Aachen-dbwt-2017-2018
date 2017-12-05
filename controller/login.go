@@ -49,20 +49,13 @@ func (l *login) Success() {
 	pwd := r.FormValue("password")
 	pwd64 := l.encryptPassword(pwd)
 	u := &model.User{}
-
 	if err := l.Ctx.DB.Where("loginname = ? AND hash = ?",
 		ln, pwd64).Find(&u).Error; err != nil {
 
 		l.Ctx.Redirect("/SignIn?error=1", http.StatusFound)
 	}
 
-	session, _ := l.Ctx.NewSession("SomeOtherCookie")
-	session.Values["username"] = u.Loginname
-	session.Values["role"], _ = u.Role()
-	session.Values["active"] = true
-	session.Options.Path = "/"
-	session.Options.MaxAge = 10 * 24 * 3600
-	_ = session.Save(l.Ctx.Request(), l.Ctx.Response())
+	l.newSession(u)
 
 	l.Ctx.Data["user"] = u
 	l.Ctx.Data["signedIn"] = true
@@ -81,14 +74,9 @@ func (l *login) SignOff() {
 	l.Ctx.Redirect("/", http.StatusFound)
 }
 
-func (l *login) newSession(name string) error {
-	session, _ := l.Ctx.NewSession(name)
-	return l.Ctx.SaveSession(session)
-}
-
 func (l *login) Register() {
 	r := l.Ctx.Request()
-	newUser := &model.User{
+	newUser := model.User{
 		Active:    true,
 		Firstname: r.FormValue("first_name"),
 		Lastname:  r.FormValue("last_name"),
@@ -98,7 +86,7 @@ func (l *login) Register() {
 		Hash:      l.encryptPassword(r.FormValue("password")),
 	}
 
-	if err := l.Ctx.DB.Create(newUser).Error; err != nil {
+	if err := l.dbCreateGuest(newUser); err != nil {
 		l.Ctx.DB.Rollback()
 		fmt.Printf("Could not create user: %s", err)
 		l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
@@ -119,4 +107,62 @@ func (l *login) SignUp() {
 	}
 	l.Ctx.Template = "login/signup"
 	l.HTML(http.StatusOK)
+}
+
+func (l *login) newSession(u *model.User) {
+	session, _ := l.Ctx.NewSession("SomeOtherCookie")
+	session.Values["username"] = u.Loginname
+	session.Values["role"], _ = u.Role()
+	session.Values["active"] = true
+	session.Options.Path = "/"
+	session.Options.MaxAge = 10 * 24 * 3600
+	_ = session.Save(l.Ctx.Request(), l.Ctx.Response())
+}
+
+func (l *login) dbCreateUser(u *model.User) error {
+	return l.Ctx.DB.Create(u).Error
+}
+
+func (l *login) dbCreateMember(m *model.Member) error {
+	return l.Ctx.DB.Create(m).Error
+}
+
+func (l *login) dbCreateGuest(u model.User) error {
+	guest := &model.Guest{}
+	guest.User = u
+	return l.Ctx.DB.Create(&guest).Error
+}
+
+func (l *login) dbCreateStudent(u model.User) error {
+	if err := l.dbCreateUser(&u); err != nil {
+		return err
+	}
+	m := model.Member{
+		UserID: u.ID,
+		User:   u,
+	}
+	if err := l.dbCreateMember(&m); err != nil {
+		return err
+	}
+	s := model.Student{
+		MemberID: m.UserID,
+	}
+	return l.Ctx.DB.Create(&s).Error
+}
+
+func (l *login) dbCreateEmployee(u model.User) error {
+	if err := l.dbCreateUser(&u); err != nil {
+		return err
+	}
+	m := model.Member{
+		UserID: u.ID,
+		User:   u,
+	}
+	if err := l.dbCreateMember(&m); err != nil {
+		return err
+	}
+	e := model.Employee{
+		MemberID: m.UserID,
+	}
+	return l.Ctx.DB.Create(&e).Error
 }
