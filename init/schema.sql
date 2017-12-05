@@ -1,20 +1,20 @@
-DROP TABLE IF EXISTS trans_produkt_zutat;
-DROP TABLE IF EXISTS zutat;
-DROP TABLE IF EXISTS preis;
-DROP TABLE IF EXISTS trans_produkt_bestellung;
-DROP TABLE IF EXISTS produkt;
-DROP TABLE IF EXISTS kategorie;
-DROP TABLE IF EXISTS bild;
-DROP TABLE IF EXISTS bestellung;
-DROP TABLE IF EXISTS mitarbeiter;
-DROP TABLE IF EXISTS student;
-DROP TABLE IF EXISTS gast;
-DROP TABLE IF EXISTS angehoerige;
-DROP TABLE IF EXISTS nutzer;
+DROP TABLE IF EXISTS products_ingredients;
+DROP TABLE IF EXISTS ingredients;
+DROP TABLE IF EXISTS prices;
+DROP TABLE IF EXISTS products_orders;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS categorys;
+DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS guests;
+DROP TABLE IF EXISTS members;
+DROP TABLE IF EXISTS users;
 
 
 CREATE TABLE IF NOT EXISTS users (
-    nr INT AUTO_INCREMENT,
+    id INT UNSIGNED AUTO_INCREMENT,
     active TINYINT(1) NOT NULL DEFAULT TRUE,
     firstname VARCHAR(100) NOT NULL,
     lastname VARCHAR(100) NOT NULL,
@@ -26,110 +26,110 @@ CREATE TABLE IF NOT EXISTS users (
     algo VARCHAR(6) CHECK(algo = 'sha256'),
     salt VARCHAR(32) NOT NULL,
     `hash` VARCHAR(64) NOT NULL,
-    PRIMARY KEY(Nr)
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE IF NOT EXISTS members (
-    nr INT NOT NULL AUTO_INCREMENT,
-    FOREIGN KEY (nr) REFERENCES users(nr) ON DELETE CASCADE,
-    PRIMARY KEY (nr)
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE,
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS guests (
     reason VARCHAR(200) NOT NULL,
     expiry_date DATE DEFAULT CURRENT_DATE,
-    nr INT NOT NULL,
-    FOREIGN KEY (nr) REFERENCES users(nr) ON DELETE CASCADE,
-    PRIMARY KEY (nr)
+    id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE,
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS students (
-    student_id INT UNSIGNED NOT NULL UNIQUE CHECK( matrikelnummer > 10000
-        AND matrikelnummer < 9999999),
+    id INT UNSIGNED NOT NULL UNIQUE CHECK( id > 10000
+        AND id < 9999999),
     course VARCHAR(100) NOT NULL,
-    nr INT NOT NULL,
-    FOREIGN KEY (nr) REFERENCES angehoerige(nr) ON DELETE CASCADE,
-    PRIMARY KEY (nr)
+    member_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (id) REFERENCES members(id) ON DELETE CASCADE,
+    PRIMARY KEY (id)
 );
 
--- -------------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS mitarbeiter (
-    telefonnummer INT,
-    buero VARCHAR(4),
-    nr INT NOT NULL,
-    FOREIGN KEY (nr) REFERENCES angehoerige(nr) ON DELETE CASCADE,
-    PRIMARY KEY (nr)
+CREATE TABLE IF NOT EXISTS employees (
+    phone_number INT UNSIGNED,
+    office VARCHAR(4),
+    id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (id) REFERENCES members(id) ON DELETE CASCADE,
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS bestellung (
-    id INT AUTO_INCREMENT,
-    zeitpunkt TIMESTAMP NOT NULL,
-    nutzernr INT NOT NULL,
-    FOREIGN KEY (nutzernr) REFERENCES nutzer(Nr),
-    PRIMARY KEY (Id)
+CREATE TABLE IF NOT EXISTS orders (
+    id INT UNSIGNED AUTO_INCREMENT,
+    `time` TIMESTAMP NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS bild (
-    id INT AUTO_INCREMENT,
-    binaerdaten BLOB NOT NULL,
+CREATE TABLE IF NOT EXISTS images (
+    id INT UNSIGNED AUTO_INCREMENT,
+    blob_data BLOB NOT NULL,
     alttext VARCHAR(60),
-    titel VARCHAR(60),
-    bildunterschrift VARCHAR(80),
+    title VARCHAR(60),
+    caption VARCHAR(80),
     PRIMARY KEY(ID)
 );
 
-CREATE TABLE IF NOT EXISTS kategorie (
-    id INT AUTO_INCREMENT,
-    bezeichnung VARCHAR(100),
-    oberkategorie INT DEFAULT NULL,
-    kategoriebild INT,
-    CONSTRAINT `oberkat` FOREIGN KEY (oberkategorie) REFERENCES kategorie(id),
-    FOREIGN KEY (kategoriebild) REFERENCES bild(id),
+CREATE TABLE IF NOT EXISTS categorys (
+    id INT UNSIGNED AUTO_INCREMENT,
+    designation VARCHAR(100),
+    upper_category_id INT UNSIGNED DEFAULT NULL,
+    image_id INT UNSIGNED,
+    CONSTRAINT upper_category FOREIGN KEY (upper_category_id)
+      REFERENCES categorys(id),
+    FOREIGN KEY (image_id) REFERENCES images(id),
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS produkt (
-    id INT AUTO_INCREMENT,
-    beschreibung TEXT NOT NULL,
-    vegetarisch TINYINT(1),
+CREATE TABLE IF NOT EXISTS products (
+    id INT UNSIGNED AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    vegetarian TINYINT(1),
     vegan TINYINT(1),
-    produktbildId INT NOT NULL,
-    kategorieId INT NOT NULL,
-    FOREIGN KEY (produktbildId) REFERENCES bild(id),
-    FOREIGN KEY (kategorieId) REFERENCES kategorie(id),
+    image_id INT UNSIGNED NOT NULL,
+    category_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (image_id) REFERENCES images(id),
+    FOREIGN KEY (category_id) REFERENCES categorys(id),
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS trans_produkt_bestellung (
-    produktid INT NOT NULL,
-    bestellid INT NOT NULL,
-    FOREIGN KEY (produktid) REFERENCES produkt(id),
-    FOREIGN KEY (bestellid) REFERENCES bestellung(id)
+CREATE TABLE IF NOT EXISTS products_orders (
+    product_id INT UNSIGNED NOT NULL,
+    order_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (order_id) REFERENCES orders(id)
 );
 
-CREATE TABLE IF NOT EXISTS preis (
-    gastbetrag INT NOT NULL,
-    studentenbetrag INT NOT NULL,
-    mitarbeiterbetrag INT NOT NULL,
-    produkt INT NOT NULL,
-    FOREIGN KEY (produkt) REFERENCES produkt(id)
+CREATE TABLE IF NOT EXISTS prices (
+    guest INT UNSIGNED NOT NULL,
+    student INT UNSIGNED NOT NULL,
+    employee INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (id) REFERENCES products(id)
 );
 
-CREATE TABLE IF NOT EXISTS zutat (
-    id INT AUTO_INCREMENT,
-    glutenfrei TINYINT(1),
+CREATE TABLE IF NOT EXISTS ingredients (
+    id INT UNSIGNED AUTO_INCREMENT,
+    gluten_free TINYINT(1),
     bio TINYINT(1),
-    vegetarisch TINYINT(1),
+    vegetarian TINYINT(1),
     vegan TINYINT(1),
-    beschreibung TEXT,
-    Name VARCHAR(100) NOT NULL,
+    description TEXT,
+    `name` VARCHAR(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS trans_produkt_zutat (
-    produktId INT NOT NULL,
-    zutatId INT NOT NULL,
-    FOREIGN KEY (produktid) REFERENCES produkt(id),
-    FOREIGN KEY (zutatid) REFERENCES zutat(id)
+CREATE TABLE IF NOT EXISTS products_ingredients (
+    product_id INT UNSIGNED NOT NULL,
+    ingredient_id INT UNSIGNED NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
 );
