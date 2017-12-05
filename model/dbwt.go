@@ -19,48 +19,49 @@ type User struct {
 	Algo      string    `gorm:"column:algo;not null"`
 	Salt      string    `gorm:"column:salt;type:varchar(32);not null"`
 	Hash      string    `gorm:"column:hash;type:varchar(64);not null"`
-	MemberID  uint
-	GuestID   uint
-	Orders    []Order `gorm:"ForeignKey:UserID;AssociationForeignKey:ID"`
+}
+
+func (u *User) Role() (string, error) {
+	return "", nil
 }
 
 // Member - Fh-Angehoerige
 type Member struct {
-	ID   uint `gorm:"column:id"`
-	User User `gorm:"ForeignKey:ID;AssociationForeignKey:ID"`
-
-	StudentID  uint
-	EmployeeID uint
+	UserID uint `gorm:"column:user_id;primary_key"`
+	User   User `gorm:"ForeignKey:UserID"`
 }
 
 // Guest - Gast
 type Guest struct {
-	ID         uint      `gorm:"column:id;not null"`
+	UserID     uint      `gorm:"column:user_id;primary_key"`
+	User       User      `gorm:"ForeignKey:UserID"`
 	Reason     string    `gorm:"column:reason;not null"`
 	ExpiryDate time.Time `gorm:"column:expiry_date;default:CURRENT_DATE"`
 }
 
 // Student - Student
 type Student struct {
-	ID        uint
-	StudentID uint   `gorm:"column:student_id;not null"`
-	Course    string `gorm:"column:course;not null"`
-	Member    Member `gorm:"ForeignKey:StudentID;AssociationForeignKe1y:ID"`
+	ID       uint   `gorm:"column:id;primary_key;AUTO_INCREMENT"` // MA
+	MemberID uint   `gorm:"column:member_id"`
+	Member   Member `gorm:"ForeignKey:ID"`
+	Course   string `gorm:"column:course;not null"`
 }
 
 // Employee - Mitarbeiter
 type Employee struct {
-	ID          uint   `gorm:"id;not null"`
+	ID          uint   `gorm:"column:id;primary_key;AUTO_INCREMENT"` // MA
+	MemberID    uint   `gorm:"column:member_id"`
+	Member      User   `gorm:"ForeignKey:ID"`
 	PhoneNumber int    `gorm:"column:phone_number;not null"`
 	Office      string `gorm:"office;not null"`
-	Member      Member `gorm:"ForeignKey:EmployeeID;AssociationForeignKe1y:ID"`
 }
 
 // Order - Bestellung
 type Order struct {
 	ID      uint      `gorm:"column:ID;AUTO_INCREMENT;primary_key"`
 	Time    time.Time `gorm:"column:time;default:CURRENT_DATE"`
-	UserID  uint
+	UserID  uint      `gorm:"column:user_id"`
+	User    User      `gorm:"ForeignKey:ID"`
 	Product []Product `gorm:"many2many:orders_products;"`
 }
 
@@ -75,24 +76,47 @@ type Image struct {
 
 // Category - Kategorie
 type Category struct {
-	ID              uint   `gorm:"column:id;AUTO_INCREMENT;primary_key"`
-	Designation     string `gorm:"column:designation;not null"`
-	UpperCategoryID uint
+	ID              uint      `gorm:"column:id;AUTO_INCREMENT;primary_key"`
+	Designation     string    `gorm:"column:designation;not null"`
+	UpperCategoryID uint      `gorm:"column:upper_category_id"`
 	UpperCategory   *Category `gorm:"ForeignKey:UpperCaterogyID"`
-	ImageID         uint
+	ImageID         uint      `gorm:"column:image_id"`
+	Image           Image     `gorm:"ForeignKey:ImageID"`
 }
 
 // Product - Produkt
 type Product struct {
-	ID          int    `gorm:"column:id;AUTO_INCREMENT;primary_key"`
-	Name        string `gorm:"column:name;not null"`
-	Description string `gorm:"column:description;not null"`
-	ImageID     int
-	CategoryID  int
-	PriceID     uint
+	ID          int          `gorm:"column:id;AUTO_INCREMENT;primary_key"`
+	Name        string       `gorm:"column:name;not null"`
+	Description string       `gorm:"column:description;not null"`
+	ImageID     uint         `gorm:"column:image_id"`
+	Image       Image        `gorm:"ForeignKey:ImageID"`
+	PriceID     uint         `gorm:"column:price_id"`
 	Price       Price        `gorm:"ForeignKey:PriceID"`
+	CategoryID  uint         `gorm:"column:category_id"`
+	Category    Category     `gorm:"ForeignKey:CategoryID"`
 	Orders      []Product    `gorm:"many2many:orders_products;"`
 	Ingredients []Ingredient `gorm:"many2many:products_ingredients;"`
+}
+
+// IsVegan - Returns true if all product ingredients are vegan
+func (p *Product) IsVegan() bool {
+	for _, v := range p.Ingredients {
+		if v.Vegan == false {
+			return v.Vegan
+		}
+	}
+	return true
+}
+
+// IsVegetarian - Returns true if all product ingredients are vegetarian
+func (p *Product) IsVegetarian() bool {
+	for _, v := range p.Ingredients {
+		if v.Vegetarian == false {
+			return v.Vegan
+		}
+	}
+	return true
 }
 
 // Price - Preis

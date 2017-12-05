@@ -31,6 +31,8 @@ func main() {
 
 	// Register Models
 	err = app.Model.Register(
+		&m.Product{},
+
 		&m.User{},
 		&m.Member{},
 		&m.Guest{},
@@ -39,7 +41,9 @@ func main() {
 		&m.Order{},
 		&m.Image{},
 		&m.Category{},
-		&m.Product{},
+
+		// &m.Product{},
+
 		&m.Price{},
 		&m.Ingredient{},
 	)
