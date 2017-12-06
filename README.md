@@ -1,5 +1,5 @@
 # Info
-This project is developed for learning purposes. This is a site that allows you to order meals in the canteen. Based on the programming language golang. The mvc framework utron is used. Located at "github. com/gernest/utron".
+This project is developed for learning purposes. This is a site that allows you to order meals in the canteen. Based on the programming language golang. The mvc framework [utron](https://github.com/gernest/utron) is used.
 
 # Entity Relationship Modell
 The model described here is used.
@@ -9,7 +9,7 @@ The model described here is used.
 
 ##### Installation:
 ```sh
-go get git@github.com:Frzifus/go-dbwt.git
+go get -v git@github.com:Frzifus/dbwt.git
 ```
 
 # Building
@@ -33,6 +33,13 @@ Note: docker compose v2+ is required.
 make docker-build
 ```
 creates a container with mariadb under the name dbwt_database_1. The default mysql root password is "1234". Furthermore, a second container dbwt_app_1 is created, where the project will be compiled.
+
+# Documentation
+##### Run godoc:
+```sh
+godoc -http=":6060"
+```
+Creates a local webserver with package documentation and can be found at [localhost:6060/pkg/github.com/frzifus/dbwt](http://localhost:6060/pkg/github.com/frzifus/dbwt/)
 
 # Test
 
