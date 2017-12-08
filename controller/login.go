@@ -7,6 +7,7 @@ import (
 	"github.com/frzifus/dbwt/model"
 	"github.com/gernest/utron/controller"
 	"net/http"
+	"strings"
 )
 
 type login struct {
@@ -21,7 +22,8 @@ func NewLogin() controller.Controller {
 			"get;/SignUp;SignUp",
 			"get;/SignIn;SignIn",
 			"get;/SignOff;SignOff",
-			"post;/Success;Success",
+			"get;/MyAccount;MyAccount",
+			"post;/MyAccount;MyAccount",
 			"post;/Register;Register",
 		},
 	}
@@ -33,7 +35,8 @@ func (l *login) encryptPassword(password string) string {
 }
 
 func (l *login) SignIn() {
-	l.Ctx.Data["signedIn"] = signedIn(l.Ctx.Request(), l.Ctx.SessionStore)
+	r := l.Ctx.Request()
+	l.Ctx.Data["signedIn"] = signedIn(r, l.Ctx.SessionStore)
 	if len(l.Ctx.Request().URL.Query().Get("error")) > 0 {
 		l.Ctx.Data["error"] = true
 	} else {
@@ -43,7 +46,7 @@ func (l *login) SignIn() {
 	l.HTML(http.StatusOK)
 }
 
-func (l *login) Success() {
+func (l *login) MyAccount() {
 	r := l.Ctx.Request()
 	ln := r.FormValue("login_name")
 	pwd := r.FormValue("password")
@@ -56,6 +59,11 @@ func (l *login) Success() {
 	}
 
 	l.newSession(u)
+
+	if referer := r.Header.Get("Referer"); !strings.Contains(referer, "SignIn") {
+		fmt.Println(referer)
+		l.Ctx.Redirect(referer, http.StatusFound)
+	}
 
 	l.Ctx.Data["user"] = u
 	l.Ctx.Data["signedIn"] = true
@@ -70,8 +78,9 @@ func (l *login) SignOff() {
 		l.Ctx.Redirect("/", http.StatusFound)
 	}
 	session.Options.MaxAge = -1
-	_ = session.Save(l.Ctx.Request(), l.Ctx.Response())
-	l.Ctx.Redirect("/", http.StatusFound)
+	r := l.Ctx.Request()
+	_ = session.Save(r, l.Ctx.Response())
+	l.Ctx.Redirect(r.Header.Get("Referer"), http.StatusFound)
 }
 
 func (l *login) Register() {
@@ -91,7 +100,6 @@ func (l *login) Register() {
 		fmt.Printf("Could not create user: %s", err)
 		l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
 	}
-
 	l.Ctx.Redirect("/SignUp?status=success", http.StatusFound)
 }
 
@@ -168,30 +176,30 @@ func (l *login) dbCreateEmployee(u model.User) error {
 }
 
 func (l *login) dbRole(u *model.User) string {
-    if _, err := l.guestByID(u.ID); err == nil {
-        return "guest"
-    } else if _, err:= l.studentByUserID(u.ID); err == nil {
-        return "student"
-    } else if _, err := l.employeeByUserID(u.ID); err == nil {
-        return "employee"
-    } 
-    return ""
+	if _, err := l.guestByID(u.ID); err == nil {
+		return "guest"
+	} else if _, err := l.studentByUserID(u.ID); err == nil {
+		return "student"
+	} else if _, err := l.employeeByUserID(u.ID); err == nil {
+		return "employee"
+	}
+	return ""
 }
 
 func (l *login) studentByUserID(id uint) (*model.Student, error) {
-    s := &model.Student{}
-    err := l.Ctx.DB.Where("member_id = ?", id).First(&s).Error
-    return s, err
+	s := &model.Student{}
+	err := l.Ctx.DB.Where("member_id = ?", id).First(&s).Error
+	return s, err
 }
 
 func (l *login) guestByID(id uint) (*model.Guest, error) {
-    g := &model.Guest{}
-    err := l.Ctx.DB.First(&g, id).Error
-    return g, err        
+	g := &model.Guest{}
+	err := l.Ctx.DB.First(&g, id).Error
+	return g, err
 }
 
 func (l *login) employeeByUserID(id uint) (*model.Employee, error) {
-    e := &model.Employee{}
-    err := l.Ctx.DB.Where("member_id = ?", id).First(&e).Error
-    return e, err    
+	e := &model.Employee{}
+	err := l.Ctx.DB.Where("member_id = ?", id).First(&e).Error
+	return e, err
 }
