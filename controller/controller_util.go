@@ -6,8 +6,12 @@ import (
 	"reflect"
 )
 
+var (
+	cookieName = "SomeOtherCookie"
+)
+
 func signedIn(r *http.Request, store sessions.Store) bool {
-	s, err := store.Get(r, "SomeOtherCookie")
+	s, err := store.Get(r, cookieName)
 	if err != nil {
 		return false
 	}
@@ -18,13 +22,13 @@ func signedIn(r *http.Request, store sessions.Store) bool {
 }
 
 func role(r *http.Request, store sessions.Store) string {
-	s, err := store.Get(r, "SessionOtherCookie")
+	s, err := store.Get(r, cookieName)
 	if err != nil {
 		return ""
 	}
-	if _, ok := s.Values["role"]; ok {
-		r := reflect.ValueOf(s.Values["role"]).String()
-		return r
+	switch v := reflect.ValueOf(s.Values["role"]); v.Kind() {
+	case reflect.String:
+		return v.String()
 	}
 	return ""
 }
