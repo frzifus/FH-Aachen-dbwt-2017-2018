@@ -23,7 +23,8 @@ func NewLogin() controller.Controller {
 			"get;/SignIn;SignIn",
 			"get;/SignOff;SignOff",
 			"get;/MyAccount;MyAccount",
-			"post;/MyAccount;MyAccount",
+
+			"post;/SignIn;SignIn",
 			"post;/Register;Register",
 		},
 	}
@@ -36,38 +37,44 @@ func (l *login) encryptPassword(password string) string {
 
 func (l *login) SignIn() {
 	r := l.Ctx.Request()
-	l.Ctx.Data["signedIn"] = signedIn(r, l.Ctx.SessionStore)
-	if len(l.Ctx.Request().URL.Query().Get("error")) > 0 {
-		l.Ctx.Data["error"] = true
-	} else {
-		l.Ctx.Data["error"] = false
+	if signedIn := signedIn(r, l.Ctx.SessionStore); signedIn {
+		l.Ctx.Redirect(r.Referer(), http.StatusFound)
 	}
-	l.Ctx.Template = "login/signin"
-	l.HTML(http.StatusOK)
-}
 
-func (l *login) MyAccount() {
-	r := l.Ctx.Request()
 	ln := r.FormValue("login_name")
 	pwd := r.FormValue("password")
 	pwd64 := l.encryptPassword(pwd)
 	u := &model.User{}
 	if err := l.Ctx.DB.Where("loginname = ? AND hash = ?",
 		ln, pwd64).Find(&u).Error; err != nil {
-
-		l.Ctx.Redirect("/SignIn?error=1", http.StatusFound)
+		l.Ctx.Data["login_name"] = ln
+		l.Ctx.Template = "login/signin"
+		l.HTML(http.StatusOK)
+		return
 	}
-
 	l.newSession(u)
 
 	if referer := r.Header.Get("Referer"); !strings.Contains(referer, "SignIn") {
-		fmt.Println(referer)
 		l.Ctx.Redirect(referer, http.StatusFound)
 	}
-
-	l.Ctx.Data["user"] = u
 	l.Ctx.Data["signedIn"] = true
-	l.Ctx.Data["role"] = l.dbRole(u)
+	l.Ctx.Template = "login/signin"
+	l.HTML(http.StatusOK)
+}
+
+func (l *login) MyAccount() {
+	r := l.Ctx.Request()
+	if signedIn := signedIn(r, l.Ctx.SessionStore); !signedIn {
+		l.Ctx.Redirect("/", http.StatusFound)
+	}
+
+	id, err := readID(r, l.Ctx.SessionStore)
+	if err != nil {
+		l.Ctx.Redirect(r.Header.Get("Referer"), http.StatusFound)
+	}
+	l.Ctx.Data["user"], _ = l.userByID(id)
+	l.Ctx.Data["signedIn"] = signedIn(r, l.Ctx.SessionStore)
+	l.Ctx.Data["role"] = role(r, l.Ctx.SessionStore)
 	l.Ctx.Template = "login/success"
 	l.HTML(http.StatusOK)
 }
@@ -120,6 +127,7 @@ func (l *login) SignUp() {
 func (l *login) newSession(u *model.User) {
 	session, _ := l.Ctx.NewSession("SomeOtherCookie")
 	session.Values["username"] = u.Loginname
+	session.Values["id"] = u.ID
 	session.Values["role"] = l.dbRole(u)
 	session.Values["active"] = true
 	session.Options.Path = "/"
@@ -184,6 +192,12 @@ func (l *login) dbRole(u *model.User) string {
 		return "employee"
 	}
 	return ""
+}
+
+func (l *login) userByID(id uint) (*model.User, error) {
+	u := &model.User{}
+	err := l.Ctx.DB.First(&u, id).Error
+	return u, err
 }
 
 func (l *login) studentByUserID(id uint) (*model.Student, error) {

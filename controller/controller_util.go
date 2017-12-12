@@ -32,3 +32,15 @@ func role(r *http.Request, store sessions.Store) string {
 	}
 	return ""
 }
+
+func readID(r *http.Request, store sessions.Store) (uint, error) {
+	s, err := store.Get(r, cookieName)
+	if err != nil {
+		return 0, err
+	}
+	switch v := reflect.ValueOf(s.Values["id"]); v.Kind() {
+    case reflect.Uint:
+        return uint(v.Uint()), nil
+	}
+	return 0, err
+}

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gernest/utron/controller"
-    "net/http"
+	"net/http"
 )
 
 type admin struct {
@@ -19,9 +19,8 @@ func NewAdmin() controller.Controller {
 }
 
 func (a *admin) Admin() {
-    // check if logged in
+	// check if logged in
 
 	a.Ctx.Template = "admin/admin"
 	a.HTML(http.StatusOK)
 }
-
