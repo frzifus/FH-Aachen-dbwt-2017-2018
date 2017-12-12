@@ -50,7 +50,7 @@
     </div>
     <div class="col-md-2">
       {{ if eq .role "student"}}
-      <p class="preis"><strong>Mitarbeiter</strong>-Preis <br /><strong> {{.product.Price.Student}} €</strong></p>
+      <p class="preis"><strong>Studenten</strong>-Preis <br /><strong> {{.product.Price.Student}} €</strong></p>
       {{else}}{{ if eq .role "employee"}}
       <p class="preis"><strong>Mitarbeiter</strong>-Preis <br /><strong> {{.product.Price.Employee}} €</strong></p>
       {{else}}
