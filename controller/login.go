@@ -26,6 +26,7 @@ func NewLogin() controller.Controller {
 
 			"post;/SignIn;SignIn",
 			"post;/Register;Register",
+			"post;/MyAccount;MyAccount",
 		},
 	}
 }

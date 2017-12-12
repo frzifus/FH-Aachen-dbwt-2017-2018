@@ -1,19 +1,72 @@
 {{template "header" .}}
 {{template "navbar" .}}
+<div class="row vertical-offset-md-1">
+  <div class="col-md-3" >
+  </div>
+  <div class="col-md-7" style="border: 2 px solid black;">
+    <form data-toggle="validator" role="form" method="post" id="signup_form" action="./MyAccount">
+      <div class="row">
+        <div class="col-md-5">
+          <h2><small>Vorname</small></h2>
+        </div>
+        <div class="col-md-5">
+          <h2><small>Nachname</small></h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-5 offset-md-0">
+          <input type="text" name="login_name" id="login_name" class="form-control input-lg" value="{{.user.Loginname }}" tabindex="3" required>
+        </div>
+        <div class="form-group col-md-5 offset-md-0">
+          <input type="text" name="last_name" id="last_name" class="form-control input-lg" value="{{.user.Lastname }}" tabindex="2" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5">
+          <h2><small>Is Active</small></h2>
+        </div>
+        <div class="col-md-5">
+          <h2><small>Rolle</small></h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-5 offset-md-0">
+          <input type="text" name="status" id="status" class="form-control input-lg" value="{{.user.Active}}" tabindex="4" disabled>
+        </div>
+        <div class="form-group col-md-5 offset-md-0">
+          <input type="text" name="role" id="role" class="form-control input-lg" value="{{.role }}" tabindex="5" disabled>
+        </div>
+      </div>
 
-<div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-8">
-        <p>Info</p>
-        <p>Active: {{.user.Active}} </p>
-        <p>Firstname: {{.user.Firstname }}.</p>
-        <p>Lastname: {{.user.Lastname }}.</p>
-        <p>Loginname: {{.user.Loginname }}.</p>
-        <p>Role: {{.role}}</p>
+      <h2><small>Loginname</small></h2>
+      <div class="row">
+        <div class="form-group col-md-10 offset-md-0">
+          <input type="text" name="display_name" id="display_name" class="form-control input-lg" placeholder="Display Name" value="{{.user.Loginname }}" tabindex="3"  disabled>
+        </div>
+      </div>
+      <h2><small>email</small></h2>
+      <div class="row">
+        <div class="form-group col-md-10 offset-md-0">
+          <input type="email" name="email" id="email" class="form-control input-lg" value="{{.user.Mail}}" tabindex="4" data-error="Bruh, that email address is invalid"  disabled>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-5">
+          <div class="form-group">
+            <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Confirm Password" tabindex="6" required>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+        <div class="col-md-5"><input type="submit" value="Speichern" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
+      </div>
+      <div class="row">
 
-        <p><a href="/SignOff">Ausloggen</a></p>
-    </div>
+      </div>
+    </form>
+  </div>
 </div>
+<div class="row vertical-offset-md-2">
+</div>
+
 
 {{template "footer" .}}
