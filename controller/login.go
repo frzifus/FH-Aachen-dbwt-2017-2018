@@ -80,7 +80,7 @@ func (l *login) MyAccount() {
 }
 
 func (l *login) SignOff() {
-	session, err := l.Ctx.SessionStore.Get(l.Ctx.Request(), "SomeOtherCookie")
+	session, err := l.Ctx.SessionStore.Get(l.Ctx.Request(), cookieName)
 	if err != nil {
 		l.Ctx.Redirect("/", http.StatusFound)
 	}
@@ -125,7 +125,7 @@ func (l *login) SignUp() {
 }
 
 func (l *login) newSession(u *model.User) {
-	session, _ := l.Ctx.NewSession("SomeOtherCookie")
+	session, _ := l.Ctx.NewSession(cookieName)
 	session.Values["username"] = u.Loginname
 	session.Values["id"] = u.ID
 	session.Values["role"] = l.dbRole(u)

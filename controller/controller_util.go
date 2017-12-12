@@ -6,8 +6,8 @@ import (
 	"reflect"
 )
 
-var (
-	cookieName = "SomeOtherCookie"
+const (
+	cookieName = "session"
 )
 
 func signedIn(r *http.Request, store sessions.Store) bool {
@@ -39,8 +39,8 @@ func readID(r *http.Request, store sessions.Store) (uint, error) {
 		return 0, err
 	}
 	switch v := reflect.ValueOf(s.Values["id"]); v.Kind() {
-    case reflect.Uint:
-        return uint(v.Uint()), nil
+	case reflect.Uint:
+		return uint(v.Uint()), nil
 	}
 	return 0, err
 }
