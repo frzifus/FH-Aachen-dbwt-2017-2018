@@ -138,3 +138,9 @@ type Ingredient struct {
 	Vegan       bool      `gorm:"column:vegan;not null"`
 	Products    []Product `gorm:"many2many:products_ingredients;"`
 }
+
+// Admin
+type Admin struct {
+	User   User `gorm:"ForeignKey:UserID"`
+	UserID uint `gorm:"column:user_id"`
+}
