@@ -1,0 +1,60 @@
+{{template "header" .}}
+{{template "navbar" .}}
+
+<div class="container">
+    <div class="row">
+    <h2>Letzte Anmeldung</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Zeitpunkt</th>
+                <th>Login-Name (e-Mail)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range $k,$v:=.userLogins}}
+            <tr>
+                <td>{{$v.LastLogin}}</td>
+                <td>{{$v.Loginname}} ( {{$v.Mail}} )</td>
+                <td>{{if $v.Active}}
+                    <a href="#">Deaktivieren</a>
+                    {{else}}
+                    <a href="#">Aktivieren</a>
+                    {{end}}
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+    </div>
+    <div class="row">
+        <h2>Letzte Regestierungen</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Erstellt am</th>
+                    <th>Login-Name (e-Mail)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range $k,$v:=.newRegistrations}}
+                <tr>
+                    <td>{{$v.CreatedAt}}</td>
+                    <td>{{$v.Loginname}} ( {{$v.Mail}} )</td>
+                    <td>{{if $v.Active}}
+                        <a href="#">Deaktivieren</a>
+                        {{else}}
+                        <a href="#">Aktivieren</a>
+                        {{end}}
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{{template "footer" .}}
