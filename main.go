@@ -63,6 +63,7 @@ func main() {
 	app.AddController(c.NewIndex)
 	app.AddController(c.NewProducts)
 	app.AddController(c.NewLogin)
+	app.AddController(c.NewAdmin)
 
 	// Start the server
 	port := fmt.Sprintf(":%d", app.Config.Port)
