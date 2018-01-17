@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/frzifus/dbwt/model"
 	"github.com/gernest/utron/controller"
 	"net/http"
 )
@@ -19,8 +20,17 @@ func NewAdmin() controller.Controller {
 }
 
 func (a *admin) Admin() {
-	// check if logged in
+	a.isAdmin()
 
 	a.Ctx.Template = "admin/admin"
 	a.HTML(http.StatusOK)
+}
+
+func (a *admin) isAdmin() bool {
+	admin := &model.Admin{}
+	id, readErr := readID(a.Ctx.Request(), a.Ctx.SessionStore)
+	if dbErr := a.Ctx.DB.Where("user_id = ?", id).First(&admin).Error; readErr != nil || dbErr != nil {
+		return false
+	}
+	return true
 }
