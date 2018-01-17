@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Speiseplan>
+<Menu Tag="2018-01-08T00:00:00+01:00" Kalenderwoche="2">
+<Motto>Der erste Montag</Motto>
+<Produkte>
+<Produkt Typ="Tellergericht" ProduktID="3"/>
+<Produkt Typ="Veggie" ProduktID="4"/>
+<Produkt Typ="Empfehlung" ProduktID="5"/>
+</Produkte>
+</Menu>
+<Menu Tag="2018-01-09T00:00:00+01:00" Highlight="1" Kalenderwoche="2">
+<Motto>Veggietuesday</Motto>
+<Produkte>
+<Produkt Typ="Tellergericht" ProduktID="1"/>
+<Produkt Typ="al forno" ProduktID="7"/>
+<Produkt Typ="Empfehlung" ProduktID="6"/>
+</Produkte>
+</Menu>
+<Menu Tag="2018-01-10T00:00:00+01:00" Kalenderwoche="2">
+<Motto>Fittwoch</Motto>
+<Produkte>
+<Produkt Typ="Suppe" ProduktID="8"/>
+<Produkt Typ="Veggie" ProduktID="4"/>
+<Produkt Typ="Empfehlung" ProduktID="6"/>
+</Produkte>
+</Menu>
+<Menu Tag="2018-01-11T00:00:00+01:00" Highlight="4" Kalenderwoche="2">
+<Motto>Donnerstagsschlemmerei</Motto>
+<Produkte>
+<Produkt Typ="Wok" ProduktID="2"/>
+<Produkt Typ="Veggie" ProduktID="4"/>
+<Produkt Typ="Suppe" ProduktID="8"/>
+</Produkte>
+</Menu>
+<Menu Tag="2018-01-12T00:00:00+01:00" Kalenderwoche="2">
+<Motto>TGIF</Motto>
+<Produkte>
+<Produkt Typ="Rohkost" ProduktID="4"/>
+<Produkt Typ="Wok" ProduktID="2"/>
+<Produkt Typ="Suppe" ProduktID="8"/>
+</Produkte>
+</Menu>
+</Speiseplan>
