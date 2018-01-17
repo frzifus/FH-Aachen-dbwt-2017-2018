@@ -20,7 +20,9 @@ func NewAdmin() controller.Controller {
 }
 
 func (a *admin) Admin() {
-	a.isAdmin()
+	if !a.isAdmin() {
+		a.Ctx.Redirect("/", http.StatusFound)
+	}
 
 	a.Ctx.Template = "admin/admin"
 	a.HTML(http.StatusOK)
