@@ -103,26 +103,26 @@ func (l *login) Register() {
 		Hash:      l.encryptPassword(r.FormValue("password")),
 	}
 
-    switch role := r.FormValue("role"); role {
+	switch role := r.FormValue("role"); role {
 	case "guest":
-        if err := l.dbCreateGuest(newUser); err != nil {
-            l.Ctx.DB.Rollback()
-            fmt.Printf("Could not create user: %s", err)
-            l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
-        }
+		if err := l.dbCreateGuest(newUser); err != nil {
+			l.Ctx.DB.Rollback()
+			fmt.Printf("Could not create user: %s", err)
+			l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
+		}
 	case "student":
-        if err := l.dbCreateStudent(newUser); err != nil {
-            l.Ctx.DB.Rollback()
-            fmt.Printf("Could not create user: %s", err)
-            l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
-        }
-    case "employee":
-        if err := l.dbCreateEmployee(newUser); err != nil {
-            l.Ctx.DB.Rollback()
-            fmt.Printf("Could not create user: %s", err)
-            l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
-        }
-    }
+		if err := l.dbCreateStudent(newUser); err != nil {
+			l.Ctx.DB.Rollback()
+			fmt.Printf("Could not create user: %s", err)
+			l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
+		}
+	case "employee":
+		if err := l.dbCreateEmployee(newUser); err != nil {
+			l.Ctx.DB.Rollback()
+			fmt.Printf("Could not create user: %s", err)
+			l.Ctx.Redirect("/SignUp?status=error", http.StatusFound)
+		}
+	}
 	l.Ctx.Redirect("/SignUp?status=success", http.StatusFound)
 }
 
