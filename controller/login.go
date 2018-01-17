@@ -8,6 +8,7 @@ import (
 	"github.com/gernest/utron/controller"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type login struct {
@@ -53,6 +54,7 @@ func (l *login) SignIn() {
 		l.HTML(http.StatusOK)
 		return
 	}
+	l.Ctx.DB.Model(&u).Update("LastLogin", time.Now())
 	l.newSession(u)
 
 	if referer := r.Header.Get("Referer"); !strings.Contains(referer, "SignIn") {
