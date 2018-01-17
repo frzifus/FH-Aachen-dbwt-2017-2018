@@ -41,11 +41,9 @@ func main() {
 		&m.Order{},
 		&m.Image{},
 		&m.Category{},
-
-		// &m.Product{},
-
 		&m.Price{},
 		&m.Ingredient{},
+		&m.Admin{},
 	)
 	if err != nil {
 		log.Fatal(err)
