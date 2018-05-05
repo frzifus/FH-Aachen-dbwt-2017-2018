@@ -9,7 +9,7 @@ The model described here is used.
 
 ##### Installation:
 ```sh
-go get -v git@github.com:Frzifus/dbwt.git
+go get -u -d -v github.com/Frzifus/dbwt
 ```
 
 # Building
