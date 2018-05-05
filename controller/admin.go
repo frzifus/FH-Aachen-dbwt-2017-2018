@@ -1,10 +1,12 @@
 package controllers
 
 import (
-	"github.com/frzifus/dbwt/model"
-	"github.com/gernest/utron/controller"
 	"net/http"
 	"time"
+
+	"github.com/frzifus/dbwt/model"
+	u "github.com/frzifus/dbwt/util"
+	"github.com/gernest/utron/controller"
 )
 
 type admin struct {
@@ -24,7 +26,6 @@ func (a *admin) Admin() {
 	if !a.isAdmin() {
 		a.Ctx.Redirect("/", http.StatusFound)
 	}
-	a.Ctx.Data["signedIn"] = signedIn(a.Ctx.Request(), a.Ctx.SessionStore)
 
 	layout := "2006-01-02 15:04:05"
 	str := "0001-01-01 00:00:00"
@@ -44,7 +45,7 @@ func (a *admin) Admin() {
 
 func (a *admin) isAdmin() bool {
 	admin := &model.Admin{}
-	id, readErr := readID(a.Ctx.Request(), a.Ctx.SessionStore)
+	id, readErr := u.ReadID(a.Ctx)
 	if dbErr := a.Ctx.DB.Where("user_id = ?", id).First(&admin).Error; readErr != nil || dbErr != nil {
 		return false
 	}

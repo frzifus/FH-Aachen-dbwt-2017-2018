@@ -7,15 +7,9 @@ import (
 
 	c "github.com/frzifus/dbwt/controller"
 	m "github.com/frzifus/dbwt/model"
+	u "github.com/frzifus/dbwt/util"
 	"github.com/gernest/utron"
 )
-
-func notFound(w http.ResponseWriter, r *http.Request) {
-	_, err := w.Write([]byte("Oops! 404"))
-	if err != nil {
-		log.Fatal(err)
-	}
-}
 
 func main() {
 	// Start the MVC Apo
@@ -24,7 +18,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = app.SetNotFoundHandler(http.HandlerFunc(notFound))
+	err = app.SetNotFoundHandler(http.HandlerFunc(u.NotFound))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,7 +26,6 @@ func main() {
 	// Register Models
 	err = app.Model.Register(
 		&m.Product{},
-
 		&m.User{},
 		&m.Member{},
 		&m.Guest{},
@@ -60,10 +53,10 @@ func main() {
 	app.Model.AutoMigrateAll()
 
 	// Register Controllers
-	app.AddController(c.NewIndex)
-	app.AddController(c.NewProducts)
-	app.AddController(c.NewLogin)
-	app.AddController(c.NewAdmin)
+	app.AddController(c.NewIndex, u.IsSignedIn(), u.CtxTitle("Startseite"))
+	app.AddController(c.NewProducts, u.IsSignedIn(), u.CtxTitle("Produkte"))
+	app.AddController(c.NewLogin, u.IsSignedIn(), u.CtxTitle("Auth"))
+	app.AddController(c.NewAdmin, u.IsSignedIn(), u.CtxTitle("Admin"))
 
 	// Start the server
 	port := fmt.Sprintf(":%d", app.Config.Port)
