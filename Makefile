@@ -2,7 +2,6 @@ BINARY = dbwt
 DATE = $(shell date +%FT%T%Z)
 BUILD_DIR = build/bin
 LOG_DIR= build/log
-PWD = $(shell pwd)
 
 LDFLAGS =
 
@@ -38,10 +37,13 @@ install:
 uninstall:
 	$(shell rm /etc/systemd/system/dbwt.service)
 test:
-	@echo "Write testlog..."
-	$(shell go test -v ./test... > ${LOG_DIR}/test_${DATE}.log)
+	echo "Write testlog..."
+	@mkdir -p build
+	@mkdir -p build/log
+	@$(shell go test -v ./test... > ${LOG_DIR}/test_${DATE}.log)
 viz:
 	go-callvis -minlen 3 -focus ./ -group pkg,type ./ | dot -Tpng -o dbwt-overview.png
+
 copyResources:
 	@echo Copy resources
 	cp -r static ${BUILD_DIR}/
