@@ -1,9 +1,10 @@
-version: '2'
+version: '3.3'
 services:
-  database:
+  db:
     image: mariadb
     environment:
       - MYSQL_USER=dbwt
+      - MYSQL_PASSWORD=1234
       - MYSQL_ROOT_PASSWORD=1234
       - MYSQL_DATABASE=dbwt
     ports:
@@ -17,17 +18,15 @@ services:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      - DATABASE_CONN=root:1234@tcp(database:3306)/dbwt?parseTime=true
+      - DATABASE_CONN=dbwt:1234@tcp(database:3306)/dbwt?parseTime=true
       - AUTOMIGRATE=true
     ports:
       - "8090:8090"
     depends_on:
-      - database
+      - db
     networks:
       - back
       - front
-    #volumes:
-    #  - ./docker-data/files:/go/src/github.com/frzifus/dbwt/
 
 networks:
   front:
