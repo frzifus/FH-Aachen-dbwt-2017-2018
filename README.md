@@ -9,7 +9,7 @@ The model described here is used.
 
 ##### Installation:
 ```sh
-go get -u -v github.com/frzifus/dbwt
+go get -u -v git.klimlive.de/frzifus/dbwt
 ```
 
 # Building
@@ -39,7 +39,7 @@ creates a container with mariadb under the name dbwt_database_1. The default mys
 ```sh
 godoc -http=":6060"
 ```
-Creates a local webserver with package documentation and can be found at [localhost:6060/pkg/github.com/frzifus/dbwt](http://localhost:6060/pkg/github.com/frzifus/dbwt/)
+Creates a local webserver with package documentation and can be found at [localhost:6060/pkg/git.klimlive.de/frzifus/dbwt](http://localhost:6060/pkg/git.klimlive.de/frzifus/dbwt/)
 
 # Test
 

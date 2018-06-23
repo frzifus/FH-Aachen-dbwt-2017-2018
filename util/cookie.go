@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/frzifus/dbwt/model"
+	"git.klimlive.de/frzifus/dbwt/model"
 	"github.com/gernest/utron/base"
 )
 

@@ -1,16 +1,16 @@
 FROM golang
 
-COPY . /go/src/github.com/frzifus/dbwt
+COPY . /go/src/git.klimlive.de/frzifus/dbwt
 
-#RUN ln -s /go/src/github.com/frzifus/dbwt/view view
-#RUN ln -s /go/src/github.com/frzifus/dbwt/static static
-#RUN ln -S /go/src/github.com/frzifus/dbwt/config config
+#RUN ln -s /go/src/git.klimlive.de/frzifus/dbwt/view view
+#RUN ln -s /go/src/git.klimlive.de/frzifus/dbwt/static static
+#RUN ln -S /go/src/git.klimlive.de/frzifus/dbwt/config config
 
 COPY ./view /go/bin/view
 COPY ./static /go/bin/static
 COPY ./config /go/bin/config
 
-WorkDir /go/src/github.com/frzifus/dbwt
+WorkDir /go/src/git.klimlive.de/frzifus/dbwt
 
 RUN go get -v
 

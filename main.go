@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	c "github.com/frzifus/dbwt/controller"
-	m "github.com/frzifus/dbwt/model"
-	u "github.com/frzifus/dbwt/util"
+	c "git.klimlive.de/frzifus/dbwt/controller"
+	m "git.klimlive.de/frzifus/dbwt/model"
+	u "git.klimlive.de/frzifus/dbwt/util"
 	"github.com/gernest/utron"
 )
 

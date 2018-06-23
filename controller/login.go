@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/frzifus/dbwt/model"
-	u "github.com/frzifus/dbwt/util"
+	"git.klimlive.de/frzifus/dbwt/model"
+	u "git.klimlive.de/frzifus/dbwt/util"
 	"github.com/gernest/utron/controller"
 )
 
