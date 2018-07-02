@@ -20,7 +20,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = app.SetNotFoundHandler(http.HandlerFunc(u.NotFound))
+	err = app.SetNotFoundHandler(http.HandlerFunc(u.NotFoundHandler.ServeHttp))
 	if err != nil {
 		log.Fatal(err)
 	}
