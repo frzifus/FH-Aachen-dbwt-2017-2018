@@ -11,6 +11,8 @@ import (
 	"github.com/gernest/utron"
 )
 
+var version string
+
 func main() {
 	// Start the MVC Apo
 	app, err := utron.NewMVC()
@@ -59,6 +61,7 @@ func main() {
 	app.AddController(c.NewAdmin, u.IsSignedIn(), u.CtxTitle("Admin"))
 
 	// Start the server
+	app.Log.Info("running version ", version)
 	port := fmt.Sprintf(":%d", app.Config.Port)
 	app.Log.Info("staring server on port", port)
 	log.Fatal(http.ListenAndServe(port, app))
