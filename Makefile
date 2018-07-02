@@ -2,8 +2,9 @@ APP = dbwt
 DATE = $(shell date +%FT%T%Z)
 BUILD_DIR = build/bin
 LOG_DIR= build/log
+GIT_VER=$(shell git rev-parse HEAD)
 
-LDFLAGS =
+LDFLAGS=-ldflags "-X main.version=${GIT_VER}"
 
 .PHONY: test clean arm amd64 install uninstall stack
 
@@ -11,11 +12,11 @@ LDFLAGS =
 all: clean test amd64 copyResources
 
 amd64:
-	GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ${BUILD_DIR}/${BINARY}-linux-amd64 -v
+	GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ${BUILD_DIR}/${APP}-linux-amd64 -v main.go
 arm:
-	GOOS=linux GOARCH=arm go build ${LDFLAGS} -o ${BUILD_DIR}/${BINARY}-linux-arm -v
+	GOOS=linux GOARCH=arm go build ${LDFLAGS} -o ${BUILD_DIR}/${APP}-linux-arm -v main.go
 win64:
-	GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ${BUILD_DIR}/${BINARY}-win64.exe -v
+	GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ${BUILD_DIR}/${APP}-win64.exe -v main.go
 
 stack:
 	docker stack deploy -c docker-compose.yml dbwt
